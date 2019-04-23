@@ -17,7 +17,7 @@ Class Db
 		$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 		$options = [
 			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
 			PDO::ATTR_EMULATE_PREPARES   => false,
 		];
 
@@ -30,7 +30,7 @@ Class Db
 
 	private function prepareStatement()
 	{
-		var_dump($this->sql, $this->params);
+		// var_dump($this->sql, $this->params);
 		$stmt = $this->pdo->prepare($this->sql);
 		$stmt->execute($this->params);
 		
@@ -123,6 +123,12 @@ Class Db
 	{
 		$stmt = $this->prepareStatement();
 		return $stmt->fetchAll(PDO::FETCH_OBJ);
+	}
+
+	public function indexIdall()
+	{
+		$stmt = $this->prepareStatement();
+		return $stmt->fetchAll(PDO::FETCH_UNIQUE);
 	}
 
 	public function one()

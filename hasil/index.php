@@ -13,7 +13,11 @@
     </div>
 </div>
 
-<div id="data_hasil">
+<div id="data_penilaian">
+</div>
+<div id="data_normalisasi">
+</div>
+<div id="data_rank">
 </div>
 
 <script>
@@ -28,8 +32,13 @@
                     $("#btn_hasil").attr("disabled", true).html("Processing ..");
                 },
                 success: function(result) {
-                    // $("#data_hasil").load("hasil/_data_hasil.php");
-                    
+                    if (result.status) {
+                        $("#data_penilaian").load("hasil/_data_penilaian.php", {data: result.data});
+                        // $("#data_normalisasi").load("hasil/_data_normalisasi.php", {data: result.data});
+                        // $("#data_rank").load("hasil/_data_rank.php", {data: result.data});
+                    } else {
+                        alert(result.message);
+                    }
                 },
                 complete: function() {
                     setTimeout(function() {

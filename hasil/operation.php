@@ -1,7 +1,6 @@
 <?php
 require_once('../config/Db.php');
 require_once('../components/Helpers.php');
-$db = new Db;
 
 $result = [
 	'status' => false,
@@ -10,12 +9,17 @@ $result = [
 ];
 
 $post_data = $_POST;
+$metode = $post_data['metode'];
+$result['data'] = getHasil($metode);
 
-getHasil($db, $post_data['metode']);
+if ($result['data']) {
+	$result['status'] = true;
+	$result['message'] = "Hasil SPK Penerimaan Dosen Menggunakan Metode {$metode}";
+}
 
-
-function getHasil($db, $metode)
+function getHasil($metode)
 {
+	$db = new Db;
 	$penilaian = $kriteria = $nilai = $hasil = $dosen_terbaik = null;
 
 	$penilaian = $db->selectQuery('tbl_penilaian p', ['p.*', 'd.nama_dosen'])
@@ -23,28 +27,78 @@ function getHasil($db, $metode)
                     ->on('p.id_dosen = d.id')
                     ->all();
 
-	$kriteria = $db->selectQuery('tbl_kriteria')->all();
+    if (!$penilaian) {
+    	$result['message'] = "Data Penilaian Kosong";
+    	echo json_encode($result);exit();
+    }
 
-	if ($penilaian && !Helpers::cekBobotKosong($kriteria)) {
-		$nilai = getNilai($penilaian);
+	$kriteria = $db->selectQuery('tbl_kriteria')->indexIdAll();
 
-		if ($metode === 'saw') {
-			$hasil = generateSaw($nilai, $kriteria);
-		} else if ($metode === 'wp') {
-			$hasil = generateWp($nilai, $kriteria);
-		}
-
-		// $dosen_terbaik = getDosenTerbaik($hasil, $metode);
-
+	if (!$kriteria) {
+		$result['message'] = "Data Kriteria Kosong";
+    	echo json_encode($result);exit();
 	}
 
+	if (Helpers::cekBobotKosong($kriteria)) {
+		$result['message'] = "Bobot Kriteria Masih ada yang Kosong atau 0";
+    	echo json_encode($result);exit();
+	}
+
+	$detail_kriteria = getDetailKriteria($penilaian, $kriteria);
+	$hasil = [];
+	
+	if ($metode === 'saw') {
+		foreach ($penilaian as $key => $pen) {
+			$data_nilai = [];
+
+			$data_nilai['id'] = $pen->id;
+			$data_nilai['nama_dosen'] = $pen->nama_dosen;
+			$data_nilai['nilai'] = json_decode($pen->nilai, true);
+			$data_nilai['normalisasi'] = getNormalisasi($data_nilai['nilai'], $detail_kriteria);
+			$data_nilai['rank'] = getRank($data_nilai['normalisasi'], $detail_kriteria);
+
+			$hasil[] = $data_nilai;
+		}
+	}
+
+	// $nilai = getNilai($penilaian);
+
+	// if ($metode === 'saw') {
+	// 	$hasil = generateSaw($nilai, $kriteria);
+	// } else if ($metode === 'wp') {
+	// 	$hasil = generateWp($nilai, $kriteria);
+	// }
+
+	// $dosen_terbaik = getDosenTerbaik($hasil, $metode);
+	// // var_dump($hasil['rank']);die();
+	// return [
+	// 	'penilaian' => $penilaian,
+	// 	'kriteria' => $kriteria,
+	// 	'nilai' => $nilai,
+	// 	'hasil' => $hasil,
+	// 	'dosen_terbaik' => $dosen_terbaik,
+	// ];
+
 	return [
-		'penilaian' => $penilaian,
-		'kriteria' => $kriteria,
-		'nilai' => $nilai,
 		'hasil' => $hasil,
-		'dosen_terbaik' => $dosen_terbaik,
+		'kriteria' => $kriteria,
 	];
+}
+
+function getDetailKriteria($penilaian, $kriteria)
+{
+	$detail_kriteria = [];
+	foreach ($kriteria as $id_kri => $kri) {
+		foreach ($penilaian as $pen) {
+			$nilai = json_decode($pen->nilai, true);
+			$detail_kriteria[$id_kri][] = $nilai[$id_kri];
+		}
+		$detail_kriteria[$id_kri]['nilai'] = $kri->tipe === 'COST' ? min($detail_kriteria[$id_kri]) : max($detail_kriteria[$id_kri]);
+		$detail_kriteria[$id_kri]['tipe'] = $kri->tipe === 'COST' ? 'min' : 'max';
+		$detail_kriteria[$id_kri]['bobot'] = $kri->bobot;
+	}
+
+	return $detail_kriteria;
 }
 
 function getNilai($penilaian)
@@ -61,8 +115,7 @@ function getNilai($penilaian)
 function generateSaw($nilai, $kriteria)
 {
 	$normalisasi = getNormalisasi($nilai, $kriteria);
-	var_dump($normalisasi);die();
-	$rank = $this->getRank($normalisasi, $kriteria, $jenis_bobot);
+	$rank = getRank($normalisasi, $kriteria);
 
 	return [
 		'normalisasi' => $normalisasi,
@@ -70,29 +123,52 @@ function generateSaw($nilai, $kriteria)
 	];
 }
 
-function getNormalisasi($nilai, $kriteria)
+function getNormalisasi($nilai, $detail_kriteria)
 {
-	var_dump($nilai, $kriteria);die();
 	$normalisasi = [];
-	$min_max = [];
 
-	foreach ($nilai as $key => $nil) {
-		foreach ($nil as $k => $n) {
-			$min_max[$k][] = $n;
-		}
-	}
-
-	foreach ($min_max as $k => $m) {
-		$min_max[$k] = ($kriteria[$k]->tipe == "COST") ? min($m) : max($m);
-	}
-
-	foreach ($nilai as $key => $nil) {
-		foreach ($nil as $k => $n) {
-			$normalisasi[$key][$k] = ($kriteria[$k]->tipe == "COST") ? $min_max[$k] / $n : $n / $min_max[$k];  
-		}
+	foreach ($nilai as $id_kri => $nil) {
+		$normalisasi[$id_kri] = ($detail_kriteria[$id_kri]['tipe'] === 'min') ? $detail_kriteria[$id_kri]['nilai'] / $nil : $nil / $detail_kriteria[$id_kri]['nilai'];
 	}
 
 	return $normalisasi;
+}
+
+function getRank($normalisasi, $detail_kriteria)
+{
+	$rank = [];
+
+	foreach ($normalisasi as $id_kri => $norm) {
+		$rank[$id_kri] = $norm * $detail_kriteria[$id_kri]['bobot'];
+	}
+
+	$rank = array_sum($rank);
+
+	return $rank;
+}
+
+function getDosenTerbaik($hasil, $metode)
+{
+	$data = $metode === 'saw' ? $hasil['rank'] : $hasil['vektor_v'];
+	$bests = array_keys($data, max($data));
+
+	foreach ($bests as $key => $best) {
+		$bests[$key] = getNamaDosenByIdPenilaian($best);
+	}
+
+	return $bests;
+}
+
+function getNamaDosenByIdPenilaian($id_penilaian)
+{
+	$db = new Db;
+	$id_dosen = $db->selectQuery('tbl_penilaian', ['id_dosen'])->where(['id' => $id_penilaian])->column();
+
+	if ($id_dosen) {
+		return $id_dosen[0];
+	}
+
+	return null;
 }
 
 echo json_encode($result);
