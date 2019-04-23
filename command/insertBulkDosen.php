@@ -1,6 +1,6 @@
 <?php
-require_once('./vendor/Faker/src/autoload.php');
-require_once('./config/Db.php');
+require_once('../vendor/Faker/src/autoload.php');
+require_once('../config/Db.php');
 
 $db = new Db;
 
