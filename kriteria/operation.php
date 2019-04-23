@@ -10,7 +10,6 @@ $result = [
 
 $not_empty = ['nama_kriteria'];
 $post_data = $_POST;
-$post_data['bobot'] = isset($post_data['bobot']) ? $post_data['bobot'] / 100 : null;
 
 foreach ($post_data as $field => $record) {
 	if (in_array($field, $not_empty) && $record == '') {
@@ -43,6 +42,7 @@ switch ($_GET['op']) {
 		break;
 
 	case 'set':
+		$post_data['bobot'] = isset($post_data['bobot']) ? $post_data['bobot'] / 100 : null;
 		foreach ($post_data['data_bobot'] as $data_bobot) {
 			$data_bobot['bobot'] = $data_bobot['bobot'] / 100;
 			$db->updateQuery('tbl_kriteria', $data_bobot);

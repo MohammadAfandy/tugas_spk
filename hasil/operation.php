@@ -20,17 +20,6 @@ if ($result['data']) {
 function getHasil($metode)
 {
 	$db = new Db;
-	$penilaian = $kriteria = $nilai = $hasil = $dosen_terbaik = null;
-
-	$penilaian = $db->selectQuery('tbl_penilaian p', ['p.*', 'd.nama_dosen'])
-                    ->join('tbl_dosen d')
-                    ->on('p.id_dosen = d.id')
-                    ->all();
-
-    if (!$penilaian) {
-    	$result['message'] = "Data Penilaian Kosong";
-    	echo json_encode($result);exit();
-    }
 
 	$kriteria = $db->selectQuery('tbl_kriteria')->indexIdAll();
 
@@ -43,6 +32,16 @@ function getHasil($metode)
 		$result['message'] = "Bobot Kriteria Masih ada yang Kosong atau 0";
     	echo json_encode($result);exit();
 	}
+
+	$penilaian = $db->selectQuery('tbl_penilaian p', ['p.*', 'd.nama_dosen'])
+                    ->join('tbl_dosen d')
+                    ->on('p.id_dosen = d.id')
+                    ->all();
+
+    if (!$penilaian) {
+    	$result['message'] = "Data Penilaian Kosong";
+    	echo json_encode($result);exit();
+    }
 
 	$detail_kriteria = getDetailKriteria($penilaian, $kriteria);
 	$hasil = [];
@@ -60,28 +59,12 @@ function getHasil($metode)
 			$hasil[] = $data_nilai;
 		}
 	}
-
-	// $nilai = getNilai($penilaian);
-
-	// if ($metode === 'saw') {
-	// 	$hasil = generateSaw($nilai, $kriteria);
-	// } else if ($metode === 'wp') {
-	// 	$hasil = generateWp($nilai, $kriteria);
-	// }
-
-	// $dosen_terbaik = getDosenTerbaik($hasil, $metode);
-	// // var_dump($hasil['rank']);die();
-	// return [
-	// 	'penilaian' => $penilaian,
-	// 	'kriteria' => $kriteria,
-	// 	'nilai' => $nilai,
-	// 	'hasil' => $hasil,
-	// 	'dosen_terbaik' => $dosen_terbaik,
-	// ];
+	$dosen_terbaik = getDosenTerbaik($hasil, $metode);
 
 	return [
 		'hasil' => $hasil,
 		'kriteria' => $kriteria,
+		'dosen_terbaik' => $dosen_terbaik,
 	];
 }
 
@@ -149,26 +132,17 @@ function getRank($normalisasi, $detail_kriteria)
 
 function getDosenTerbaik($hasil, $metode)
 {
-	$data = $metode === 'saw' ? $hasil['rank'] : $hasil['vektor_v'];
+	$data = [];
+	if ($metode === 'saw') {
+		foreach ($hasil as $row) {
+			$data[$row['nama_dosen']] = $row['rank'];
+		}
+	} else {
+
+	}
 	$bests = array_keys($data, max($data));
 
-	foreach ($bests as $key => $best) {
-		$bests[$key] = getNamaDosenByIdPenilaian($best);
-	}
-
 	return $bests;
-}
-
-function getNamaDosenByIdPenilaian($id_penilaian)
-{
-	$db = new Db;
-	$id_dosen = $db->selectQuery('tbl_penilaian', ['id_dosen'])->where(['id' => $id_penilaian])->column();
-
-	if ($id_dosen) {
-		return $id_dosen[0];
-	}
-
-	return null;
 }
 
 echo json_encode($result);

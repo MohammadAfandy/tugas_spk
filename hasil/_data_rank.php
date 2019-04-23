@@ -1,10 +1,11 @@
 <?php
-$post_data = $_POST['data'];
-$data_penilaian = $post_data['penilaian'];
-$data_kriteria = $post_data['kriteria'];
-$data_rank = $post_data['hasil']['rank'];
-arsort($data_rank);
-var_dump($data_penilaian, $data_rank);
+$data_hasil = $_POST['hasil'];
+$data_kriteria = $_POST['kriteria'];
+
+usort($data_hasil, function($a, $b) {
+    if ($a['rank'] == $b['rank']) return 0;
+    return ($b['rank'] > $a['rank']) ? 1 : -1;
+});
 ?>
 
 <table class="table table-hover table-striped table-bordered" id="table_hasil">
@@ -13,20 +14,19 @@ var_dump($data_penilaian, $data_rank);
             <th>No</th>
             <th>Nama Dosen</th>
             <th>Rank</th>
-        </tr>
     </thead>
     <tbody>
-        <?php if (count($data_rank) > 0): ?>
-            <?php foreach ($data_rank as $key => $rank): ?>
+        <?php if (count($data_hasil) > 0): ?>
+            <?php foreach ($data_hasil as $key => $data): ?>
                 <tr>
                     <td><?= $key + 1 ?></td>
-                    <td><?= $data_penilaian[$data_penilaian[$key]['id']]['nama_dosen'] ?></td>
-                    <td class="text-center"><?= $rank ?></td>
+                    <td><?= $data['nama_dosen'] ?></td>
+                    <td class="text-center"><?= isset($data['rank']) ? round($data['rank'], 3) : '-'?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>
             <tr class="text-center">
-                <td colspan="<?= count($data_kriteria) + 3 ?>">Data Tidak Ditemukan</td>
+                <td colspan="3">Data Tidak Ditemukan</td>
             </tr>
         <?php endif; ?>
     </tbody>

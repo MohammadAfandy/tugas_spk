@@ -122,7 +122,7 @@ Class Db
 	public function all()
 	{
 		$stmt = $this->prepareStatement();
-		return $stmt->fetchAll(PDO::FETCH_OBJ);
+		return $stmt->fetchAll();
 	}
 
 	public function indexIdall()
@@ -134,7 +134,7 @@ Class Db
 	public function one()
 	{
 		$stmt = $this->prepareStatement();
-		return $stmt->fetch(PDO::FETCH_OBJ);
+		return $stmt->fetch();
 	}
 
 	public function insertQuery($tbl, $data)

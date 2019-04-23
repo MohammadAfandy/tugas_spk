@@ -1,7 +1,6 @@
 <?php
-$post_data = $_POST['data'];
-$data_hasil = $post_data['hasil'];
-$data_kriteria = $post_data['kriteria'];
+$data_hasil = $_POST['hasil'];
+$data_kriteria = $_POST['kriteria'];
 ?>
 
 <table class="table table-hover table-striped table-bordered" id="table_hasil">

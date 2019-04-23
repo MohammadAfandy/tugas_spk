@@ -17,10 +17,10 @@
 					<li class="nav-item <?= $url == 'kriteria' ? 'active' : '' ?>">
 						<a class="nav-link" href="./kriteria.php">Kriteria</a>
 					</li>
-					<li class="nav-item" <?= $url == 'penilaian' ? 'active' : '' ?>>
+					<li class="nav-item <?= $url == 'penilaian' ? 'active' : '' ?>">
 						<a class="nav-link" href="./penilaian.php">Penilaian</a>
 					</li>
-					<li class="nav-item" <?= $url == 'hasil' ? 'active' : '' ?>>
+					<li class="nav-item <?= $url == 'hasil' ? 'active' : '' ?>">
 						<a class="nav-link" href="./hasil.php">Hasil</a>
 					</li>
 				</ul>
