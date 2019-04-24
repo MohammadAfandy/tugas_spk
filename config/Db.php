@@ -19,6 +19,7 @@ Class Db
 			PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
 			PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
 			PDO::ATTR_EMULATE_PREPARES   => false,
+			PDO::MYSQL_ATTR_FOUND_ROWS => true,
 		];
 
 		try {
@@ -150,7 +151,9 @@ Class Db
 
 		$sql = "INSERT INTO {$tbl} ({$fields}) VALUES ({$params_field})";
 
-		return $this->pdo->prepare($sql)->execute($params);
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->execute($params);
+		return $stmt->rowCount();
 	}
 
 	public function updateQuery($tbl, $data)
@@ -170,12 +173,16 @@ Class Db
 		}
 		$sql = "UPDATE {$tbl} SET {$set_value} WHERE id = {$id}";
 
-		return $this->pdo->prepare($sql)->execute($params);
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->execute($params);
+		return $stmt->rowCount();
 	}
 
 	public function deleteQuery($tbl, $id)
 	{
 		$sql = "DELETE FROM {$tbl} WHERE id = :id";
-		return $this->pdo->prepare($sql)->execute([':id' => $id]);
+		$stmt = $this->pdo->prepare($sql);
+		$stmt->execute([':id' => $id]);
+		return $stmt->rowCount();
 	}
 }

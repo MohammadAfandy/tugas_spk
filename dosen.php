@@ -6,6 +6,7 @@ require_once('template/navbar.php');
 ?>
 <div class="row">
 	<div class="container">
+		<div class="flash_message"></div>
 		<?php
 		$action = isset($_GET['act']) ? $_GET['act'] : '';
 		switch ($action) {

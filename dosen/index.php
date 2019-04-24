@@ -9,21 +9,28 @@
     $(function() {
         $("#data_dosen").load("dosen/_data_dosen.php");
         $("body").on("click", "#btn_dosen_delete", function() {
-            if (!confirm("Apakah Anda Yakin Ingin Menghapus Data ?")) {
-                return false;
-            }
-            $.ajax({
-                url:'dosen/operation.php?op=delete',
-                type:'POST',    
-                dataType: "json",
-                data: {id: $(this).data("id")},
-                beforeSend: function () { showLoading(); },
-                success: function(result) {
-                    $("#data_dosen").load("dosen/_data_dosen.php");
-                },
-                complete: function () { endLoading(); }
+            let that = $(this);
+            deleteConfirmation().then(function(res) {
+                if (res.value) {
+                    $.ajax({
+                        url:'dosen/operation.php?op=delete',
+                        type:'POST',    
+                        dataType: "json",
+                        data: {id: that.data("id")},
+                        beforeSend: function () { showLoading(); },
+                        success: function(result) {
+                            if (result.status) {
+                                Swal.fire("Deleted !", result.message, "success").then(function() {
+                                    $("#data_dosen").load("dosen/_data_dosen.php");
+                                });
+                            } else {
+                                Swal.fire("Error !", result.message, "error");
+                            }
+                        },
+                        complete: function () { endLoading(); }
+                    });
+                }
             });
-
         });
     });
 </script>

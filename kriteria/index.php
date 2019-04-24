@@ -11,20 +11,29 @@
 <script>
     $(function() {
         $("#data_kriteria").load("kriteria/_data_kriteria.php");
-        $("body").on("click", "#btn_kriteria_delete", function() {
-            if (!confirm("Apakah Anda Yakin Ingin Menghapus Data ?")) {
-                return false;
-            }
-            $.ajax({
-                url: "kriteria/operation.php?op=delete",
-                type: "POST",    
-                dataType: "json",
-                data: {id: $(this).data("id")},
-                beforeSend: function() { showLoading(); },
-                success: function(result) {
-                    $("#data_kriteria").load("kriteria/_data_kriteria.php");
-                },
-                complete: function() { endLoading(); }
+        $("body").on("click", "#btn_kriteria_delete", function(e) {
+            e.preventDefault();
+            let that = $(this);
+            deleteConfirmation().then(function(res) {
+                if (res.value) {
+                    $.ajax({
+                        url: "kriteria/operation.php?op=delete",
+                        type:'POST',    
+                        dataType: "json",
+                        data: {id: that.data("id")},
+                        beforeSend: function () { showLoading(); },
+                        success: function(result) {
+                            if (result.status) {
+                                Swal.fire("Deleted !", result.message, "success").then(function() {
+                                    $("#data_kriteria").load("kriteria/_data_kriteria.php");
+                                });
+                            } else {
+                                Swal.fire("Error !", result.message, "error");
+                            }
+                        },
+                        complete: function () { endLoading(); }
+                    });
+                }
             });
         });
 

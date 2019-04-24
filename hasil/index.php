@@ -83,7 +83,7 @@
                         $("#info_hasil").text("Dosen Terbaik Adalah " + result.data.dosen_terbaik.join(" dan "));
 
                     } else {
-                        alert(result.message);
+                        Swal.fire("Error !", result.message, "error");
                     }
                 },
                 complete: function() { endLoading(); }

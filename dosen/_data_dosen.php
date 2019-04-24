@@ -30,7 +30,7 @@ require_once('../components/Helpers.php');
                     <td><?= $data->tempat_lahir . ', ' . Helpers::dateIndo($data->tgl_lahir) ?></td>
                     <td><?= $data->no_hp ?></td>
                     <td><?= $data->email ?></td>
-                    <td style="width: 140px;">
+                    <td>
                         <a href="dosen.php?act=edit&id=<?= $data->id ?>" class="btn btn-warning btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm" id="btn_dosen_delete" data-id="<?= $data->id ?>">Delete</button>
                     </td>

@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: application/json');
+error_reporting(0);
 require_once('../config/db.php');
 $db = new Db;
 
@@ -56,12 +58,12 @@ function formValidation($post_data)
 
 	foreach ($post_data as $field => $record) {
 		if (in_array($field, $not_empty) && $record == '') {
-			$result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
+			$result['message'] = strtoupper(str_replace('_', ' ', preg_replace('/^id/i', 'nama', $field))) . " Tidak Boleh Kosong";
 			echo json_encode($result);exit();
 		}
 		if ($field == "nilai") {
 			foreach ($record as $id_kri => $nilai) {
-				if (empty($nilai)) {
+				if (empty(intval($nilai))) {
 					$result['message'] = "Nilai Tidak Boleh Kosong atau 0";
 					echo json_encode($result);exit();
 				}

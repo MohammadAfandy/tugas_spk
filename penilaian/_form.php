@@ -68,9 +68,12 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
                 data: new FormData(data),
                 beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    alert(result.message);
                     if (result.status) {
-                        window.location = '<?= Helpers::baseUrl("penilaian.php") ?>';
+                        Swal.fire({title: "Success !", text: result.message, type: "success"}).then(function() { 
+                            window.location = '<?= Helpers::baseUrl("penilaian.php") ?>';
+                        });
+                    } else {
+                        Swal.fire("Error !", result.message, "error");
                     }
                 },
                 complete: function() { endLoading(); }

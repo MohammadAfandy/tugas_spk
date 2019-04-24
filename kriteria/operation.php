@@ -1,4 +1,6 @@
 <?php
+header('Content-Type: application/json');
+error_reporting(0);
 require_once('../config/db.php');
 $db = new Db;
 
