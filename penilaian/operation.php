@@ -8,19 +8,12 @@ $result = [
 	'data' => [],
 ];
 
-$not_empty = ['id_dosen'];
 $post_data = $_POST;
-$post_data['nilai'] = isset($post_data['nilai']) ? json_encode($post_data['nilai']) : null;
-
-foreach ($post_data as $field => $record) {
-	if (in_array($field, $not_empty) && $record == '') {
-		$result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
-		echo json_encode($result);exit();
-	}
-}
 
 switch ($_GET['op']) {
 	case 'tambah':
+		formValidation($post_data);
+		$post_data['nilai'] = json_encode($post_data['nilai']);
 		$insert = $db->insertQuery('tbl_penilaian', $post_data);
 
 		if ($insert) {
@@ -32,6 +25,8 @@ switch ($_GET['op']) {
 		break;
 
 	case 'update':
+		formValidation($post_data);
+		$post_data['nilai'] = json_encode($post_data['nilai']);
 		$update = $db->updateQuery('tbl_penilaian', $post_data);
 
 		if ($update) {
@@ -53,6 +48,26 @@ switch ($_GET['op']) {
 		}
 		break;
 
+}
+
+function formValidation($post_data)
+{
+	$not_empty = ['id_dosen'];
+
+	foreach ($post_data as $field => $record) {
+		if (in_array($field, $not_empty) && $record == '') {
+			$result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
+			echo json_encode($result);exit();
+		}
+		if ($field == "nilai") {
+			foreach ($record as $id_kri => $nilai) {
+				if (empty($nilai)) {
+					$result['message'] = "Nilai Tidak Boleh Kosong atau 0";
+					echo json_encode($result);exit();
+				}
+			}
+		}
+	}
 }
 
 echo json_encode($result);

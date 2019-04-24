@@ -50,22 +50,14 @@ if ($_GET['act'] === 'edit') {
                 contentType: false,
                 dataType: "json",
                 data: new FormData(data),
-                beforeSend: function() {
-                    $("#btn_submit_kriteria").attr("disabled", true).html("Processing ..");
-                },
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    setTimeout(function() {
-                        alert(result.message);
-                        if (result.status) {
-                            window.location = '<?= Helpers::baseUrl("kriteria.php") ?>';
-                        }
-                    }, 1000);
+                    alert(result.message);
+                    if (result.status) {
+                        window.location = '<?= Helpers::baseUrl("kriteria.php") ?>';
+                    }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        $("#btn_submit_kriteria").attr("disabled", false).html(op);
-                    }, 1000);
-                },
+                complete: function() { endLoading(); },
             });
         });
     });

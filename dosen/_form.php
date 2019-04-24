@@ -86,22 +86,14 @@ if ($_GET['act'] === 'edit') {
                 contentType: false,
                 dataType: "json",
                 data: new FormData(data),
-                beforeSend: function() {
-                    $("#btn_submit_dosen").attr("disabled", true).html("Processing ..");
-                },
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    setTimeout(function() {
-                        alert(result.message);
-                        if (result.status) {
-                            window.location = '<?= Helpers::baseUrl("dosen.php") ?>';
-                        }
-                    }, 1000);
+                    alert(result.message);
+                    if (result.status) {
+                        window.location = '<?= Helpers::baseUrl("dosen.php") ?>';
+                    }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        $("#btn_submit_dosen").attr("disabled", false).html(op);
-                    }, 1000);
-                },
+                complete: function() { endLoading(); }
             });
 
         });

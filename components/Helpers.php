@@ -65,4 +65,27 @@ class Helpers
 
         return false;
     }
+
+    /**
+     * cek apakah semua nilai penilaian sudah diset atau belum (masih 0)
+     * sudah = false, belum = true
+     * @param array $kriteria
+     * @return boolean
+     */
+    public static function cekPenilaianKosong($penilaian, $jumlah_kriteria)
+    {
+        $arr_jml_nilai = [];
+
+        foreach ($penilaian as $pen) {
+            $arr_jml_nilai[] = count(json_decode($pen->nilai, true));
+        }
+
+        foreach ($arr_jml_nilai as $jml) {
+            if ($jumlah_kriteria != $jml) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
 }

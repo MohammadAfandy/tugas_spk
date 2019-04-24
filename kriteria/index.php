@@ -20,10 +20,11 @@
                 type: "POST",    
                 dataType: "json",
                 data: {id: $(this).data("id")},
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    // $("#table_kriteria").find("tr[id=" + result.data + "]").fadeOut();
                     $("#data_kriteria").load("kriteria/_data_kriteria.php");
-                }
+                },
+                complete: function() { endLoading(); }
             });
         });
 
@@ -78,22 +79,14 @@
                 url: "kriteria/operation.php?op=reset",
                 type: "POST",
                 dataType: "json",
-                beforeSend: function() {
-                    $("#btn_reset_bobot").attr("disabled", true).html("Processing ..");
-                },
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    setTimeout(function() {
-                        alert(result.message);
-                        if (result.status) {
-                            $("#data_kriteria").load("kriteria/_data_kriteria.php");
-                        }
-                    }, 1000);
+                    alert(result.message);
+                    if (result.status) {
+                        $("#data_kriteria").load("kriteria/_data_kriteria.php");
+                    }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        $("#btn_reset_bobot").attr("disabled", false).html("Reset Bobot Kriteria");
-                    }, 1000);
-                },
+                complete: function() { endLoading(); }
             });
         });
 
@@ -104,22 +97,14 @@
                 type: "POST",
                 dataType: "json",
                 data: {data_bobot: data_bobot},
-                beforeSend: function() {
-                    $("#btn_set_bobot").attr("disabled", true).html("Processing ..");
-                },
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    setTimeout(function() {
-                        alert(result.message);
-                        if (result.status) {
-                            $("#data_kriteria").load("kriteria/_data_kriteria.php");
-                        }
-                    }, 1000);
+                    alert(result.message);
+                    if (result.status) {
+                        $("#data_kriteria").load("kriteria/_data_kriteria.php");
+                    }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        $("#btn_set_bobot").attr("disabled", false).html("Set Bobot Kriteria");
-                    }, 1000);
-                },
+                complete: function() { endLoading(); }
             });
         }
     });

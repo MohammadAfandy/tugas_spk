@@ -4,8 +4,6 @@ require_once('template/header.php');
 require_once('template/navbar.php');
 ?>
 
-<div class="row">
-	<div class="containe">
 		<center>
         	<h3>SISTEM PENDUKUNG KEPUTUSAN</h3>
         	<p class="lead">Aplikasi Sistem Pendukung Keputusan Menggunakan Metode SAW dan WP</p>
@@ -155,8 +153,6 @@ require_once('template/navbar.php');
 				</div>
 			</div>
 		</div>
-    </div>
-</div>
 <?php
 require_once('template/footer.php');
 ?>

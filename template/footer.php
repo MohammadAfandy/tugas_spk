@@ -1,4 +1,5 @@
-
+	</div>
+</div>
 <script>
 	$(function() {
 		$(".datepicker").datepicker({

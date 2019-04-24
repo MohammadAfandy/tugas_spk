@@ -10,6 +10,12 @@ $result = [
 
 $post_data = $_POST;
 $metode = $post_data['metode'];
+
+if (!$metode) {
+	$result['message'] = "Metode Tidak Boleh Kosong";
+	echo json_encode($result);exit();
+}
+
 $result['data'] = getHasil($metode);
 
 if ($result['data']) {
@@ -43,6 +49,11 @@ function getHasil($metode)
     	echo json_encode($result);exit();
     }
 
+    if (Helpers::cekPenilaianKosong($penilaian, count($kriteria))) {
+		$result['message'] = "Nilai di Data Penilaian Masih ada yang Kosong atau 0";
+    	echo json_encode($result);exit();
+	}
+
 	$detail_kriteria = getDetailKriteria($penilaian, $kriteria);
 	$hasil = [];
 	
@@ -58,7 +69,25 @@ function getHasil($metode)
 
 			$hasil[] = $data_nilai;
 		}
+	} else if ($metode === 'wp') {
+		foreach ($penilaian as $key => $pen) {
+			$data_nilai = [];
+
+			$data_nilai['id'] = $pen->id;
+			$data_nilai['nama_dosen'] = $pen->nama_dosen;
+			$data_nilai['nilai'] = json_decode($pen->nilai, true);
+			$data_nilai['vektor_s'] = getVektorS($data_nilai['nilai'], $detail_kriteria);
+
+			$hasil[] = $data_nilai;
+		}
+	
+		$vektor_v = getVektorV($hasil);
+		
+		foreach ($hasil as $key => $has) {
+			$hasil[$key]['vektor_v'] = $vektor_v[$has['id']];
+		}
 	}
+
 	$dosen_terbaik = getDosenTerbaik($hasil, $metode);
 
 	return [
@@ -95,17 +124,6 @@ function getNilai($penilaian)
 	return $nilai;
 }
 
-function generateSaw($nilai, $kriteria)
-{
-	$normalisasi = getNormalisasi($nilai, $kriteria);
-	$rank = getRank($normalisasi, $kriteria);
-
-	return [
-		'normalisasi' => $normalisasi,
-		'rank' => $rank,
-	];
-}
-
 function getNormalisasi($nilai, $detail_kriteria)
 {
 	$normalisasi = [];
@@ -130,16 +148,49 @@ function getRank($normalisasi, $detail_kriteria)
 	return $rank;
 }
 
+function getVektorS($nilai, $detail_kriteria)
+{
+	$vektor_s = [];
+
+	foreach ($nilai as $id_kri => $nil) {
+		$vektor_s[$id_kri] = ($detail_kriteria[$id_kri]['tipe'] === 'min') ? pow($nil, -($detail_kriteria[$id_kri]['bobot'])) : pow($nil, $detail_kriteria[$id_kri]['bobot']);
+	}
+
+	$vektor_s = array_product($vektor_s);
+
+	return $vektor_s;
+}
+
+function getVektorV($hasil)
+{
+	$vektor_v = [];
+	$sum = 0;
+
+	foreach ($hasil as $has) {
+		$sum += $has['vektor_s'];
+	}
+
+	foreach ($hasil as $has) {
+		$vektor_v[$has['id']] = $has['vektor_s'] / $sum;
+	}
+
+	return $vektor_v;
+}
+
 function getDosenTerbaik($hasil, $metode)
 {
 	$data = [];
+	
 	if ($metode === 'saw') {
 		foreach ($hasil as $row) {
 			$data[$row['nama_dosen']] = $row['rank'];
 		}
-	} else {
-
+	} else if ($metode === 'wp') {
+		foreach ($hasil as $row) {
+			$data[$row['nama_dosen']] = $row['vektor_v'];
+		}
 	}
+
 	$bests = array_keys($data, max($data));
 
 	return $bests;

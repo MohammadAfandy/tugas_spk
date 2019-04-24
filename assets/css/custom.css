@@ -1,0 +1,27 @@
+.hidden-background {
+    background: #fff;
+    pointer-events: none;
+    opacity:0.4;
+    filter: alpha(opacity = 50)
+}
+
+.loader {
+  z-index: 9999;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 0.5s linear infinite;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

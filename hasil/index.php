@@ -20,19 +20,19 @@
 
     <ul class="nav nav-pills">
         <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#tab_penilaian">Penilaian</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab_normalisasi">Normalisasi</a></li>
-        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab_rank">Rank</a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab2" id="link2"></a></li>
+        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab3" id="link3"></a></li>
     </ul>
 
     <div class="tab-content">
         <div id="tab_penilaian" class="tab-pane fade">
             <div id="data_penilaian"></div>
         </div>
-        <div id="tab_normalisasi" class="tab-pane fade">
-            <div id="data_normalisasi"></div>
+        <div id="tab2" class="tab-pane fade">
+            <div id="data2"></div>
         </div>
-        <div id="tab_rank" class="tab-pane fade">
-            <div id="data_rank"></div>
+        <div id="tab3" class="tab-pane fade">
+            <div id="data3"></div>
         </div>
     </div>
 </div>
@@ -46,38 +46,47 @@
                 type: "POST",
                 dataType: "json",
                 data: {metode: $("#metode").val()},
-                beforeSend: function() {
-                    $("#btn_hasil").attr("disabled", true).html("Processing ..");
-                },
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    setTimeout(function() {
-                        if (result.status) {
-                            $("#container_hasil").show();
+                    if (result.status) {
+                        $("#container_hasil").show();
 
-                            $("#data_penilaian").load("hasil/_data_penilaian.php", {
-                                hasil: result.data.hasil,
-                                kriteria: result.data.kriteria
-                            });
-                            $("#data_normalisasi").load("hasil/_data_normalisasi.php", {
-                                hasil: result.data.hasil,
-                                kriteria: result.data.kriteria
-                            });
-                            $("#data_rank").load("hasil/_data_rank.php", {
-                                hasil: result.data.hasil,
-                                kriteria: result.data.kriteria
-                            });
+                        $("#data_penilaian").load("hasil/_data_penilaian.php", {
+                            hasil: result.data.hasil,
+                            kriteria: result.data.kriteria
+                        });
 
-                            $("#info_hasil").text("Dosen Terbaik Adalah " + result.data.dosen_terbaik.join(" dan "));
-                        } else {
-                            alert(result.message);
+                        if ($("#metode").val() == "saw") {
+                            $("#link2").text("Normalisasi");
+                            $("#data2").load("hasil/_data_normalisasi.php", {
+                                hasil: result.data.hasil,
+                                kriteria: result.data.kriteria
+                            });
+                            $("#link3").text("Rank");
+                            $("#data3").load("hasil/_data_rank.php", {
+                                hasil: result.data.hasil,
+                                kriteria: result.data.kriteria
+                            });
+                        } else if ($("#metode").val() == "wp") {
+                            $("#link2").text("Vektor S");
+                            $("#data2").load("hasil/_data_vektor_s.php", {
+                                hasil: result.data.hasil,
+                                kriteria: result.data.kriteria
+                            });
+                            $("#link3").text("Vektor V");
+                            $("#data3").load("hasil/_data_vektor_v.php", {
+                                hasil: result.data.hasil,
+                                kriteria: result.data.kriteria
+                            });
                         }
-                    }, 1000);
+
+                        $("#info_hasil").text("Dosen Terbaik Adalah " + result.data.dosen_terbaik.join(" dan "));
+
+                    } else {
+                        alert(result.message);
+                    }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        $("#btn_hasil").attr("disabled", false).html("Proses");
-                    }, 1000);
-                }
+                complete: function() { endLoading(); }
             });
         });
     });

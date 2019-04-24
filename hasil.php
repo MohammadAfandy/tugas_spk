@@ -4,8 +4,6 @@ require_once('components/Helpers.php');
 require_once('template/header.php');
 require_once('template/navbar.php');
 ?>
-<div class="row">
-	<div class="container">
 		<?php
 		$action = isset($_GET['act']) ? $_GET['act'] : '';
 		switch ($action) {
@@ -20,8 +18,6 @@ require_once('template/navbar.php');
 				break;
 		}
 		?>
-	</div>
-</div>
 
 <script>
 

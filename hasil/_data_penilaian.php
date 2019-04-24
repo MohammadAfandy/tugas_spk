@@ -3,7 +3,7 @@ $data_hasil = $_POST['hasil'];
 $data_kriteria = $_POST['kriteria'];
 ?>
 
-<table class="table table-hover table-striped table-bordered" id="table_hasil">
+<table class="table table-hover table-striped table-bordered" id="table_penilaian">
     <thead>
         <tr>
             <th rowspan="2">No</th>

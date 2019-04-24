@@ -66,22 +66,14 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
                 contentType: false,
                 dataType: "json",
                 data: new FormData(data),
-                beforeSend: function() {
-                    $("#btn_submit_penilaian").attr("disabled", true).html("Processing ..");
-                },
+                beforeSend: function() { showLoading(); },
                 success: function(result) {
-                    setTimeout(function() {
-                        alert(result.message);
-                        if (result.status) {
-                            window.location = '<?= Helpers::baseUrl("penilaian.php") ?>';
-                        }
-                    }, 1000);
+                    alert(result.message);
+                    if (result.status) {
+                        window.location = '<?= Helpers::baseUrl("penilaian.php") ?>';
+                    }
                 },
-                complete: function() {
-                    setTimeout(function() {
-                        $("#btn_submit_penilaian").attr("disabled", false).html(op);
-                    }, 1000);
-                },
+                complete: function() { endLoading(); }
             });
         });
     });

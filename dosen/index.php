@@ -17,9 +17,11 @@
                 type:'POST',    
                 dataType: "json",
                 data: {id: $(this).data("id")},
+                beforeSend: function () { showLoading(); },
                 success: function(result) {
                     $("#data_dosen").load("dosen/_data_dosen.php");
-                }
+                },
+                complete: function () { endLoading(); }
             });
 
         });

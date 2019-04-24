@@ -8,18 +8,11 @@ $result = [
 	'data' => [],
 ];
 
-$not_empty = ['nama_kriteria'];
 $post_data = $_POST;
-
-foreach ($post_data as $field => $record) {
-	if (in_array($field, $not_empty) && $record == '') {
-		$result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
-		echo json_encode($result);exit();
-	}
-}
 
 switch ($_GET['op']) {
 	case 'tambah':
+		formValidation($post_data);
 		$insert = $db->insertQuery('tbl_kriteria', $post_data);
 
 		if ($insert) {
@@ -31,6 +24,7 @@ switch ($_GET['op']) {
 		break;
 
 	case 'update':
+		formValidation($post_data);
 		$update = $db->updateQuery('tbl_kriteria', $post_data);
 
 		if ($update) {
@@ -72,6 +66,18 @@ switch ($_GET['op']) {
 		}
 		break;
 
+}
+
+function formValidation($post_data)
+{
+	$not_empty = ['nama_kriteria', 'tipe'];
+
+	foreach ($post_data as $field => $record) {
+		if (in_array($field, $not_empty) && $record == '') {
+			$result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
+			echo json_encode($result);exit();
+		}
+	}
 }
 
 echo json_encode($result);
