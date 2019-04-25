@@ -42,7 +42,7 @@
         $("body").on("click", "#btn_hasil", function() {
             $("#container_hasil").hide();
             $.ajax({
-                url: "hasil/operation.php",
+                url: "app/hasil/operation.php",
                 type: "POST",
                 dataType: "json",
                 data: {metode: $("#metode").val()},
@@ -51,30 +51,30 @@
                     if (result.status) {
                         $("#container_hasil").show();
 
-                        $("#data_penilaian").load("hasil/_data_penilaian.php", {
+                        $("#data_penilaian").load("app/hasil/_data_penilaian.php", {
                             hasil: result.data.hasil,
                             kriteria: result.data.kriteria
                         });
 
                         if ($("#metode").val() == "saw") {
                             $("#link2").text("Normalisasi");
-                            $("#data2").load("hasil/_data_normalisasi.php", {
+                            $("#data2").load("app/hasil/_data_normalisasi.php", {
                                 hasil: result.data.hasil,
                                 kriteria: result.data.kriteria
                             });
                             $("#link3").text("Rank");
-                            $("#data3").load("hasil/_data_rank.php", {
+                            $("#data3").load("app/hasil/_data_rank.php", {
                                 hasil: result.data.hasil,
                                 kriteria: result.data.kriteria
                             });
                         } else if ($("#metode").val() == "wp") {
                             $("#link2").text("Vektor S");
-                            $("#data2").load("hasil/_data_vektor_s.php", {
+                            $("#data2").load("app/hasil/_data_vektor_s.php", {
                                 hasil: result.data.hasil,
                                 kriteria: result.data.kriteria
                             });
                             $("#link3").text("Vektor V");
-                            $("#data3").load("hasil/_data_vektor_v.php", {
+                            $("#data3").load("app/hasil/_data_vektor_v.php", {
                                 hasil: result.data.hasil,
                                 kriteria: result.data.kriteria
                             });

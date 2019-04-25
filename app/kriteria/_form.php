@@ -3,7 +3,7 @@
 $db = new Db;
 
 if ($_GET['act'] === 'edit') {
-    $data = $db->selectQuery('tbl_kriteria')->where(['id' => $_GET['id']])->one();    
+    $data = $db->selectQuery('tbl_kriteria')->where(['id' => $_GET['id']])->one();
 }
 ?>
 
@@ -44,7 +44,7 @@ if ($_GET['act'] === 'edit') {
             let data = $("#form_kriteria")[0];
             let op = '<?= $_GET['act'] === 'tambah' ? 'tambah' : 'update' ?>';
             $.ajax({
-                url: 'kriteria/operation.php?op=' + op,
+                url: 'app/kriteria/operation.php?op=' + op,
                 type: 'POST',
                 processData: false,
                 contentType: false,

@@ -18,6 +18,15 @@ if ($_GET['act'] === 'edit') {
 $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai, true) : '';
 ?>
 
+<?php if (!$data_dosen): ?>
+<div class="alert alert-danger" role="alert">
+  Data Dosen Kosong atau Sudah Digunakan Semuanya. Isi <a href="dosen.php">Dosen</a> Terlebih Dahulu.
+</div>
+<?php elseif (!$data_kriteria): ?>
+<div class="alert alert-danger" role="alert">
+  Data Kriteria Kosong. Isi <a href="kriteria.php">Kriteria</a> Terlebih Dahulu.
+</div>
+<?php else: ?>
 <form id="form_penilaian" class="mt-5">
     <?php if ($_GET['act'] === 'edit'): ?>
         <input type="hidden" name="id" id="id" value="<?= $data->id ?>" class="form-control">
@@ -52,6 +61,7 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
         </div>
     </div>
 </form>
+<?php endif; ?>
 
 <script>
     $(function() {
@@ -60,8 +70,8 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
             let data = $("#form_penilaian")[0];
             let op = '<?= $_GET['act'] === 'tambah' ? 'tambah' : 'update' ?>';
             $.ajax({
-                url: 'penilaian/operation.php?op=' + op,
-                type: 'POST',
+                url: "app/penilaian/operation.php?op=" + op,
+                type: "POST",
                 processData: false,
                 contentType: false,
                 dataType: "json",

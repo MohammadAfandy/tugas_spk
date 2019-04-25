@@ -1,6 +1,6 @@
 <?php
-require_once('../config/db.php');
-require_once('../components/Helpers.php');
+require_once('../../config/db.php');
+require_once('../../components/Helpers.php');
 ?>
 <table class="table table-hover table-striped table-bordered" id="table_dosen">
     <thead>

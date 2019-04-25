@@ -3,24 +3,24 @@
 class Helpers
 {
 
-	public static function getCurrentPage()
-	{
-		$uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-		$uri_segments = explode('/', $uri_path);
-		$current_uri = preg_replace('/.php$/i', '', $uri_segments[2]);
-		
-		return $current_uri;
-	}
+    public static function getCurrentPage()
+    {
+        $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri_segments = explode('/', $uri_path);
+        $current_uri = preg_replace('/.php$/i', '', $uri_segments[2]);
+        
+        return $current_uri;
+    }
 
-	public static function getUrlSegment($segment = false)
-	{
-		$uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-		$uri_segments = explode('/', $uri_path);
-		
-		return $segment ? $uri_segments[$segment] : $uri_segments;
-	}
+    public static function getUrlSegment($segment = false)
+    {
+        $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $uri_segments = explode('/', $uri_path);
+        
+        return $segment ? $uri_segments[$segment] : $uri_segments;
+    }
 
-	/**
+    /**
      * Convert date to date format Indonesia
      * @param string date
      * @return string result
@@ -42,7 +42,7 @@ class Helpers
 
     public static function baseUrl($url)
     {
-    	return 'http://localhost/tugas_spk/' . $url;
+        return 'http://localhost/tugas_spk/' . $url;
     }
 
     /**

@@ -5,22 +5,22 @@ require_once('template/header.php');
 require_once('template/navbar.php');
 ?>
 <div class="row">
-	<div class="container">
-		<?php
-		$action = isset($_GET['act']) ? $_GET['act'] : '';
-		switch ($action) {
-			case 'tambah':
-				require_once('kriteria/tambah.php');
-				break;
-			case 'edit':
-				require_once('kriteria/edit.php');
-				break;
-			default:
-				require_once('kriteria/index.php');
-				break;
-		}
-		?>
-	</div>
+    <div class="container">
+        <?php
+        $action = isset($_GET['act']) ? $_GET['act'] : '';
+        switch ($action) {
+            case 'tambah':
+                require_once('app/kriteria/tambah.php');
+                break;
+            case 'edit':
+                require_once('app/kriteria/edit.php');
+                break;
+            default:
+                require_once('app/kriteria/index.php');
+                break;
+        }
+        ?>
+    </div>
 </div>
 
 <script>

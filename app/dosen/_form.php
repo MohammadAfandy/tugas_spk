@@ -80,7 +80,7 @@ if ($_GET['act'] === 'edit') {
             let data = $("#form_dosen")[0];
             let op = '<?= $_GET['act'] === 'tambah' ? 'tambah' : 'update' ?>';
             $.ajax({
-                url: 'dosen/operation.php?op=' + op,
+                url: 'app/dosen/operation.php?op=' + op,
                 type: 'POST',
                 processData: false,
                 contentType: false,

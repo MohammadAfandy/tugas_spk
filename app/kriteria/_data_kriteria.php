@@ -1,5 +1,5 @@
 <?php
-require_once('../config/db.php');
+require_once('../../config/db.php');
 ?>
 <table class="table table-hover table-striped table-bordered" id="table_kriteria">
     <thead>
@@ -26,7 +26,7 @@ require_once('../config/db.php');
                         <input type="number" class="form-control text-right bobot-kriteria" style="width: 100%" id="bobot" data-id="<?= $data->id ?>" value="<?= $data->bobot * 100 ?>" tabindex="<?= $tab_index ?>">        
                     </td>
                     <td>
-                        <a href="kriteria.php?act=edit&id=<?= $data->id ?>" class="btn btn-success btn-sm">Sub Kriteria</a>
+                        <button class="btn btn-info btn-sm" id="btn_sub_kriteria" data-id="<?= $data->id ?>">Sub Kriteria</button>
                         <a href="kriteria.php?act=edit&id=<?= $data->id ?>" class="btn btn-warning btn-sm">Edit</a>
                         <button class="btn btn-danger btn-sm" id="btn_kriteria_delete" data-id="<?= $data->id ?>">Delete</button>
                     </td>

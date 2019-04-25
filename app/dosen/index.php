@@ -1,27 +1,27 @@
-<h2 class="text-center">Data Penilaian</h2>
+<h2 class="text-center">Data Dosen</h2>
 <p>
-    <a href="penilaian.php?act=tambah" class="btn btn-primary">Tambah Data Penilaian</a>
+    <a href="dosen.php?act=tambah" class="btn btn-primary">Tambah Data Dosen</a>
 </p>
-<div id="data_penilaian">
+<div id="data_dosen">
 </div>
 
 <script>
     $(function() {
-        $("#data_penilaian").load("penilaian/_data_penilaian.php");
-        $("body").on("click", "#btn_penilaian_delete", function() {
+        $("#data_dosen").load("app/dosen/_data_dosen.php");
+        $("body").on("click", "#btn_dosen_delete", function() {
             let that = $(this);
-            deleteConfirmation().then(function(res) {
+            alertConfirmation().then(function(res) {
                 if (res.value) {
                     $.ajax({
-                        url:'penilaian/operation.php?op=delete',
-                        type:'POST',    
+                        url: "app/dosen/operation.php?op=delete",
+                        type: "POST",    
                         dataType: "json",
                         data: {id: that.data("id")},
                         beforeSend: function () { showLoading(); },
                         success: function(result) {
                             if (result.status) {
                                 Swal.fire("Deleted !", result.message, "success").then(function() {
-                                    $("#data_penilaian").load("penilaian/_data_penilaian.php");
+                                    $("#data_dosen").load("app/dosen/_data_dosen.php");
                                 });
                             } else {
                                 Swal.fire("Error !", result.message, "error");
