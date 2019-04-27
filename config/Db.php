@@ -4,7 +4,7 @@ Class Db
 {
     private $pdo;
     private $sql;
-    private $params;
+    private $params = [];
 
     public function __construct()
     {
@@ -40,7 +40,8 @@ Class Db
 
     private function removeAttributes()
     {
-        $this->sql = $this->params = null;
+        $this->sql = null;
+        $this->params = [];
     }
 
     public function selectQuery($tbl, $column = false)
@@ -59,7 +60,6 @@ Class Db
     public function where($where)
     {
         $this->sql .= " WHERE ";
-        $this->params = [];
 
         $count = 1;
         foreach ($where as $field => $record) {
@@ -76,17 +76,21 @@ Class Db
 
     public function whereIn($column, $in, $not = "IN")
     {
-        if ($in) {
-            $this->params = [];
-            $count = 1;
-            foreach ($in as $n) {
-                $this->params[":param{$count}"] = $n;
-                $count++;
-            }
-
-            $list = implode(', ', array_keys($this->params));
-            $this->sql .= " WHERE {$column} {$not} ({$list})";  
+        $count = 1;
+        foreach ($in as $n) {
+            $this->params[":param{$count}"] = $n;
+            $count++;
         }
+
+        $list = implode(', ', array_keys($this->params));
+        $this->sql .= " WHERE {$column} {$not} ({$list})";  
+
+        return $this;
+    }
+
+    public function limit($start, $items)
+    {
+        $this->sql .= " LIMIT {$start}, {$items}";
 
         return $this;
     }

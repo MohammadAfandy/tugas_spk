@@ -1,13 +1,13 @@
 <?php
-require_once('./vendor/Faker/src/autoload.php');
-require_once('./config/Db.php');
+require_once('../vendor/Faker/src/autoload.php');
+require_once('../config/Db.php');
 
 $db = new Db;
 
 $faker = Faker\Factory::create('id_ID');
 
 $count = 1;
-for ($i = 1; $i <= 20; $i++) {
+for ($i = 1; $i <= 1000; $i++) {
     $insert = $db->insertQuery('tbl_dosen', [
         'nidn' => $faker->nik(),
         'nama_dosen' => $faker->name,

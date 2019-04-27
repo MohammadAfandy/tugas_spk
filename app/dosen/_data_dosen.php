@@ -18,12 +18,17 @@ require_once('../../components/Helpers.php');
     <tbody>
         <?php
         $db = new Db;
-        $datas = $db->selectQuery('tbl_dosen')->all();
+        $items_per_page = 10;
+        $page = $_GET['page'];
+        $start = $page > 1 ? ($page * $items_per_page) - $items_per_page : 0;
+        $total = count($db->selectQuery('tbl_dosen')->all());
+        $pages = ceil($total / $items_per_page);
+        $datas = $db->selectQuery('tbl_dosen')->limit($start, $items_per_page)->all();
         ?>
-        <?php if (count($datas) > 0): ?>
+        <?php if ($total > 0): ?>
             <?php foreach ($datas as $key => $data): ?>
                 <tr id="<?= $data->id ?>">
-                    <td><?= $key + 1 ?></td>
+                    <td><?= $start + $key + 1 ?></td>
                     <td><?= $data->nidn ?></td>
                     <td><?= $data->nama_dosen ?></td>
                     <td><?= $data->jk ?></td>
@@ -43,3 +48,23 @@ require_once('../../components/Helpers.php');
         <?php endif; ?>
     </tbody>
 </table>
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        <li class="page-item">
+            <a class="page-link" href="dosen.php" tabindex="-1">First</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="dosen.php?page=<?= $page - 1 ?>" tabindex="-1">Previous</a>
+        </li>
+        <?php for ($i = $page; $i <= $pages - ($pages - ($page + 5)); $i++): ?>
+            <li class="<?= $i == $page ? 'page-item active' : 'page-item' ?>"><a class="page-link" href="dosen.php?page=<?= $i ?>"><?= $i ?></a></li>
+        <?php endfor; ?>
+        <li class="page-item">
+            <a class="page-link" href="dosen.php?page=<?= $page + 1 ?>">Next</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="dosen.php?page=<?= $pages ?>">Last</a>
+        </li>
+    </ul>
+</nav>

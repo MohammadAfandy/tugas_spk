@@ -40,7 +40,7 @@ class Helpers
         return $result;
     }
 
-    public static function baseUrl($url)
+    public static function baseUrl($url = '')
     {
         return 'http://localhost/tugas_spk/' . $url;
     }

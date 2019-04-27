@@ -2,12 +2,12 @@
 <p>
     <a href="dosen.php?act=tambah" class="btn btn-primary">Tambah Data Dosen</a>
 </p>
+<?php $page = isset($_GET['page']) ? $_GET['page'] : 1; ?>
 <div id="data_dosen">
 </div>
-
 <script>
     $(function() {
-        $("#data_dosen").load("app/dosen/_data_dosen.php");
+        $("#data_dosen").load("app/dosen/_data_dosen.php?page=<?= $page ?>");
         $("body").on("click", "#btn_dosen_delete", function() {
             let that = $(this);
             alertConfirmation().then(function(res) {
