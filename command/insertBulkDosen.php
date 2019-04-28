@@ -6,8 +6,8 @@ $db = new Db;
 
 $faker = Faker\Factory::create('id_ID');
 
-$count = 1;
-for ($i = 1; $i <= 1000; $i++) {
+$count = 0;
+for ($i = 0; $i < 12; $i++) {
     $insert = $db->insertQuery('tbl_dosen', [
         'nidn' => $faker->nik(),
         'nama_dosen' => $faker->name,
