@@ -1,4 +1,5 @@
 <?php
+ini_set('max_execution_time', 3000);
 header('Content-Type: application/json');
 error_reporting(0);
 require_once('../../config/db.php');
@@ -59,18 +60,23 @@ switch ($_GET['op']) {
         break;
 
     case 'delete':
+        // remove json key id kriteria di kolom nilai di table penilaian
+        $data_penilaian = $db->selectQuery('tbl_penilaian')->all();
+        foreach ($data_penilaian as $pen) {
+            $nilai = json_decode($pen->nilai, true);
+            if (isset($nilai[$post_data['id']])) {
+                unset($nilai[$post_data['id']]);
+                $update_penilaian = $db->updateQuery('tbl_penilaian', ['id' => $pen->id, 'nilai' => json_encode($nilai)]);
+                if (!$update_penilaian) {
+                    $result['message'] = "Data Kriteria Gagal Dihapus";
+                    echo json_encode($result);exit();
+                }
+            }
+        }
         $delete = $db->deleteQuery('tbl_kriteria', $post_data['id']);
         if ($delete) {
             $result['status'] = true;
             $result['message'] = "Data Kriteria Berhasil Dihapus Tapi Bobot Gagal Direset";
-
-            // remove json key id kriteria di kolom nilai di table penilaian
-            $data_penilaian = $db->selectQuery('tbl_penilaian')->all();
-            foreach ($data_penilaian as $pen) {
-                $nilai = json_decode($pen->nilai, true);
-                unset($nilai[$post_data['id']]);
-                $db->updateQuery('tbl_penilaian', ['id' => $pen->id, 'nilai' => json_encode($nilai)]);
-            }
 
             $reset = resetBobot($db);
             if ($reset) {

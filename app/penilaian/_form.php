@@ -76,7 +76,6 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
                 contentType: false,
                 dataType: "json",
                 data: new FormData(data),
-                beforeSend: function() { showLoading(); },
                 success: function(result) {
                     if (result.status) {
                         Swal.fire({title: "Success !", text: result.message, type: "success"}).then(function() { 
@@ -85,8 +84,7 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
                     } else {
                         Swal.fire("Error !", result.message, "error");
                     }
-                },
-                complete: function() { endLoading(); }
+                }
             });
         });
     });

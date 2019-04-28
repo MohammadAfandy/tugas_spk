@@ -57,13 +57,13 @@ Class Db
         return $this;
     }
 
-    public function where($where)
+    public function where($where, $op = "=")
     {
         $this->sql .= " WHERE ";
 
         $count = 1;
         foreach ($where as $field => $record) {
-            $this->sql .= " {$field} = :param{$count}";
+            $this->sql .= " {$field} {$op} :param{$count}";
             $this->params[":param{$count}"] = $record;
             if ($record !== end($where)) {
                 $this->sql .= " AND ";
@@ -77,13 +77,20 @@ Class Db
     public function whereIn($column, $in, $not = "IN")
     {
         $count = 1;
-        foreach ($in as $n) {
-            $this->params[":param{$count}"] = $n;
-            $count++;
+
+        if ($in) {
+            foreach ($in as $n) {
+                $this->params[":param{$count}"] = $n;
+                $count++;
+            }
+
+            $list = implode(', ', array_keys($this->params));
+            $this->sql .= " WHERE {$column} {$not} ({$list})"; 
         }
 
-        $list = implode(', ', array_keys($this->params));
-        $this->sql .= " WHERE {$column} {$not} ({$list})";  
+        if ($in) {
+            
+        }
 
         return $this;
     }
@@ -95,9 +102,9 @@ Class Db
         return $this;
     }
 
-    public function join($tbl)
+    public function join($tbl, $type = '')
     {
-        $this->sql .= " JOIN {$tbl} ";
+        $this->sql .= " {$type} JOIN {$tbl} ";
         return $this;
     }
 

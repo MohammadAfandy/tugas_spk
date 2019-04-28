@@ -1,6 +1,6 @@
 <?php
-$data_hasil = $_POST['hasil'];
-$data_kriteria = $_POST['kriteria'];
+$data_hasil = json_decode($_POST['hasil'], true);
+$data_kriteria = json_encode($_POST['kriteria']);
 
 usort($data_hasil, function($a, $b) {
     if ($a['vektor_v'] == $b['vektor_v']) return 0;

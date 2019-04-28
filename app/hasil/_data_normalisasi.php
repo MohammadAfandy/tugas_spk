@@ -1,6 +1,6 @@
 <?php
-$data_hasil = $_POST['hasil'];
-$data_kriteria = $_POST['kriteria'];
+$data_hasil = json_decode($_POST['hasil'], true);
+$data_kriteria = json_decode($_POST['kriteria'], true);
 ?>
 
 <table class="table table-hover table-striped table-bordered" id="table_normalisasi">

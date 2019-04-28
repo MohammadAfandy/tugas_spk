@@ -25,3 +25,16 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+
+* {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.navbar {
+  min-height: 70px !important;
+}
+
+.navbar a{
+  font-size: 20px;
+}

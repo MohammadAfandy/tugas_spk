@@ -93,8 +93,8 @@ function getHasil($metode)
     $dosen_terbaik = getDosenTerbaik($hasil, $metode);
 
     return [
-        'hasil' => $hasil,
-        'kriteria' => $kriteria,
+        'hasil' => json_encode($hasil),
+        'kriteria' => json_encode($kriteria),
         'dosen_terbaik' => $dosen_terbaik,
     ];
 }

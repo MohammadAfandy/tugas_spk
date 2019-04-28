@@ -32,7 +32,6 @@
                         type:'POST',    
                         dataType: "json",
                         data: {id: that.data("id")},
-                        beforeSend: function () { showLoading(); },
                         success: function(result) {
                             if (result.status) {
                                 Swal.fire("Deleted !", result.message, "success").then(function() {
@@ -41,8 +40,7 @@
                             } else {
                                 Swal.fire("Error !", result.message, "error");
                             }
-                        },
-                        complete: function () { endLoading(); }
+                        }
                     });
                 }
             });
@@ -99,7 +97,6 @@
                 url: "app/kriteria/operation.php?op=reset",
                 type: "POST",
                 dataType: "json",
-                beforeSend: function() { showLoading(); },
                 success: function(result) {
                     if (result.status) {
                         Swal.fire("Reseted !", result.message, "success").then(function() {
@@ -108,8 +105,7 @@
                     } else {
                         Swal.fire("Error !", result.message, "error");
                     }
-                },
-                complete: function() { endLoading(); }
+                }
             });
         });
 
@@ -120,7 +116,6 @@
                 type: "POST",
                 dataType: "json",
                 data: {data_bobot: data_bobot},
-                beforeSend: function() { showLoading(); },
                 success: function(result) {
                     if (result.status) {
                         Swal.fire("Success !", result.message, "success").then(function() {
@@ -129,8 +124,7 @@
                     } else {
                         Swal.fire("Error !", result.message, "error");
                     }
-                },
-                complete: function() { endLoading(); }
+                }
             });
         }
     });

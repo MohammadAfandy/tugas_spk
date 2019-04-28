@@ -88,4 +88,56 @@ class Helpers
         
         return false;
     }
+
+    public static function generatePagination($table, $count_all_data, $count_page = 10, $items_per_page = 10)
+    {
+        if ($count_all_data <= $items_per_page) {
+            $file = '';    
+        } else {
+            $file = __DIR__ . '/../template/pagination.php';
+            if (!$file) return '';   
+        }
+
+        $modul = Helpers::getUrlSegment(3);
+        $key = isset($_GET['key']) ? $_GET['key'] : NULL;
+        $current_page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+        $start = $current_page > 1 ? ($current_page * $items_per_page) - $items_per_page : 0;
+        $last_page = ceil($count_all_data / $items_per_page);
+
+        $start_page = 1;
+        if ($count_all_data < $count_page * $items_per_page) {
+            $count_page = $max_page = $last_page;
+        } else {
+            // biar ga minus pas di batas bawah star_page nya
+            if ($current_page <= ceil($count_page / 2)) {
+                $start_page = 1;
+                $max_page = ($start_page + $count_page) - 1;
+
+            // biar ga lebih halaman terakhirnya pas di batas atas
+            } else if ($current_page > $last_page - floor($count_page / 2)) {
+                $start_page = $last_page - $count_page;
+                $max_page = $start_page + $count_page;
+
+            // Biar current_page tetep ditengah
+            } else {
+                $start_page = $current_page - floor($count_page / 2);
+                $max_page = ($start_page + $count_page) - 1;
+            }
+        }
+
+        if ($file) {   
+            ob_start();
+            include $file;
+            $html = ob_get_clean();   
+        } else {
+            $html = '';
+        }
+
+        return [
+            'start' => $start,
+            'items_per_page' => $items_per_page,
+            'key' => $key,
+            'html' => $html,
+        ];
+    }
 }

@@ -50,7 +50,6 @@ if ($_GET['act'] === 'edit') {
                 contentType: false,
                 dataType: "json",
                 data: new FormData(data),
-                beforeSend: function() { showLoading(); },
                 success: function(result) {
                     if (result.status) {
                         Swal.fire({title: "Success !", text: result.message, type: "success"}).then(function() { 
@@ -59,8 +58,7 @@ if ($_GET['act'] === 'edit') {
                     } else {
                         Swal.fire("Error !", result.message, "error");
                     }
-                },
-                complete: function() { endLoading(); },
+                }
             });
         });
     });

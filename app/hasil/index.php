@@ -46,7 +46,6 @@
                 type: "POST",
                 dataType: "json",
                 data: {metode: $("#metode").val()},
-                beforeSend: function() { showLoading(); },
                 success: function(result) {
                     if (result.status) {
                         $("#container_hasil").show();
@@ -85,8 +84,7 @@
                     } else {
                         Swal.fire("Error !", result.message, "error");
                     }
-                },
-                complete: function() { endLoading(); }
+                }
             });
         });
     });

@@ -14,17 +14,15 @@
     <script src="assets/js/sweetalert2.all.min.js"></script>
     <div class="loader" style="display: none;"></div>
     <script>
-        function showLoading()
-        {
+        $(document).ajaxStart(function() {
             $("#content").addClass("hidden-background");
             $(".loader").show();
-        }
-
-        function endLoading()
-        {   
+        });
+        $(document).ajaxComplete(function() {
             $(".loader").hide();
             $("#content").removeClass("hidden-background");
-        }
+        });
+
         function alertConfirmation(
             text = "Apakah Anda Yakin Ingin Menghapus Data ?",
             title = "Delete Confirmation",
