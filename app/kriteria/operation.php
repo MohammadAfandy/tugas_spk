@@ -1,7 +1,7 @@
 <?php
 ini_set('max_execution_time', 3000);
 header('Content-Type: application/json');
-error_reporting(0);
+// error_reporting(0);
 require_once('../../config/db.php');
 $db = new Db;
 
@@ -84,6 +84,28 @@ switch ($_GET['op']) {
             }
         } else {
             $result['message'] = "Data Kriteria Gagal Dihapus";
+        }
+        break;
+
+    case 'savesub':
+        if (isset($post_data['sub_kriteria']) && is_array($post_data['sub_kriteria'])) {
+            $sub_kriteria = [];
+            foreach ($post_data['sub_kriteria'] as $sub) {
+                if ($sub['nama'] == '' || !$sub['nilai']) {
+                    $result['message'] = "Nama dan Nilai Sub Kriteria Tidak Boleh Kosong";
+                    echo json_encode($result);exit();
+                }
+                $sub_kriteria[$sub['nilai']] = $sub['nama'];
+            }
+            $post_data['sub_kriteria'] = json_encode($sub_kriteria);
+        }
+        $savesub = $db->updateQuery('tbl_kriteria', $post_data);
+
+        if ($savesub) {
+            $result['status'] = true;
+            $result['message'] = "Data Sub Kriteria Berhasil Disimpan";
+        } else {
+            $result['message'] = "Data Sub Kriteria Gagal Disimpan";
         }
         break;
 

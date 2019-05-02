@@ -172,7 +172,6 @@ Class Db
             $params[":{$field}"] = $record;
         }
         $sql = "UPDATE {$tbl} SET {$set_value} WHERE id = {$id}";
-
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute($params);
         return $stmt->rowCount();
@@ -183,6 +182,13 @@ Class Db
         $sql = "DELETE FROM {$tbl} WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
+        return $stmt->rowCount();
+    }
+
+    public function query($sql)
+    {
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute();
         return $stmt->rowCount();
     }
 }

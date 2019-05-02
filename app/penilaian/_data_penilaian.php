@@ -64,7 +64,7 @@ if ($search) {
                     <td><?= $data->nama_dosen ?></td>
                     <?php if (!empty($nilai) && is_array($nilai)): ?>
                         <?php foreach ($data_kriteria as $kriteria): ?>
-                            <td class="text-center"><?= isset($nilai[$kriteria->id]) ? $nilai[$kriteria->id] : '-'?></td>
+                            <td class="text-center"><?= isset($nilai[$kriteria->id]) ? Helpers::getNamaSubFromNilai($db, $nilai[$kriteria->id], $kriteria->id) : '-'?></td>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     <td>

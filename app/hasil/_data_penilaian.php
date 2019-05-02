@@ -1,11 +1,16 @@
 <?php
 require_once('../../components/Helpers.php');
+
+if (!$_POST) {
+    header('Location: ' . Helpers::baseUrl("hasil.php"));exit();
+}
+
 $data_hasil = json_decode($_POST['hasil'], true);
 $data_kriteria = json_decode($_POST['kriteria'], true);
 
-$count_all_data = count($data_hasil);
-$pagination = Helpers::generatePagination('penilaian', $count_all_data);
-$data_hasil = array_slice($data_hasil, $pagination['start'], $pagination['items_per_page'], true);
+// $count_all_data = count($data_hasil);
+// $pagination = Helpers::generatePagination('penilaian', $count_all_data);
+// $data_hasil = array_slice($data_hasil, $pagination['start'], $pagination['items_per_page'], true);
 ?>
 
 <table class="table table-hover table-striped table-bordered" id="table_penilaian">
@@ -41,5 +46,3 @@ $data_hasil = array_slice($data_hasil, $pagination['start'], $pagination['items_
         <?php endif; ?>
     </tbody>
 </table>
-
-<?= $pagination['html'] ?>

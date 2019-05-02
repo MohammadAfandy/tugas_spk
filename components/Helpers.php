@@ -89,6 +89,24 @@ class Helpers
         return false;
     }
 
+    /**
+     * Convert nilai sub_kriteria to nama sub_kriteria
+     * @param double nilai_sub_kriteria
+     * @param int id_kriteria
+     * @return string nama_sub_kriteria
+     */
+    public static function getNamaSubFromNilai($db, $nilai_sub_kriteria, $id_kriteria)
+    {
+        $sub_kriteria = $db->selectQuery('tbl_kriteria')->where(['id' => $id_kriteria])->one()->sub_kriteria;
+
+        if ($sub_kriteria) {
+            $sub_kriteria = json_decode($sub_kriteria, true);
+            return $sub_kriteria[$nilai_sub_kriteria]; 
+        }
+
+        return $nilai_sub_kriteria;
+    }
+
     public static function generatePagination($table, $count_all_data, $count_page = 10, $items_per_page = 10)
     {
         if ($count_all_data <= $items_per_page) {

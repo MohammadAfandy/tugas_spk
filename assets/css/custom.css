@@ -38,3 +38,7 @@
 .navbar a{
   font-size: 20px;
 }
+
+.btn-tambah, .btn-hapus {
+  cursor: pointer;
+}

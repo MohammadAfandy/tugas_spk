@@ -6,6 +6,7 @@
     <link href="assets/css/jquery-ui.min.css" rel="stylesheet"/>
     <link href="assets/css/custom.css" rel="stylesheet"/>
     <link href="assets/css/sweetalert2.min.css" rel="stylesheet"/>
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet"/>
 </head>
 <body>
     <script src="assets/js/jquery-3.3.1.js"></script>

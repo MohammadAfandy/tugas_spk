@@ -3,7 +3,7 @@ $db = new Db;
 
 $dosen_exist = $db->selectQuery('tbl_penilaian', ['id_dosen'])->column();
 $data_dosen = $db->selectQuery('tbl_dosen', ['id', 'nama_dosen'])->whereIn('id', $dosen_exist, 'NOT IN')->all();
-$data_kriteria = $db->selectQuery('tbl_kriteria', ['id', 'nama_kriteria'])->all();
+$data_kriteria = $db->selectQuery('tbl_kriteria', ['id', 'nama_kriteria', 'sub_kriteria'])->all();
 
 if ($_GET['act'] === 'edit') {
     $data = $db->selectQuery('tbl_penilaian p', ['p.*', 'd.nama_dosen'])
@@ -44,15 +44,24 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
             </div>
         </div>
         <fieldset class="fieldset">
+            <legend>Nilai</legend>
             <?php foreach ($data_kriteria as $kriteria): ?>
                 <div class="form-group row">
                     <label for="nilai[<?= $kriteria->id ?>]" class="col-sm-3 col-form-label"><?= $kriteria->nama_kriteria ?></label>
                     <div class="col-sm-9">
-                        <input type="number" name="nilai[<?= $kriteria->id ?>]" id="nilai[<?= $kriteria->id ?>]" value="<?= $nilai[$kriteria->id] ?>" class="form-control" style="width: 200px;">
+                    <?php if (!empty($kriteria->sub_kriteria)): ?>
+                        <select name="nilai[<?= $kriteria->id ?>]" class="form-control">
+                            <option value="">--Pilih Sub Kriteria--</option>
+                            <?php foreach (json_decode($kriteria->sub_kriteria, true) as $nilai_sub => $nama_sub): ?>
+                                <option value="<?= $nilai_sub ?>" <?= is_array($nilai) && $nilai[$kriteria->id] == $nilai_sub ? 'selected="selected"' : '' ?>><?= $nama_sub ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php else: ?>
+                        <input type="text" name="nilai[<?= $kriteria->id ?>]" id="nilai[<?= $kriteria->id ?>]" value="<?= is_array($nilai) ? $nilai[$kriteria->id] : '' ?>" class="form-control" style="width: 200px;">
+                    <?php endif; ?>
                     </div>
                 </div>
             <?php endforeach; ?>
-            <legend>Nilai</legend>
         </fieldset>
         <div class="form-group row">
             <div class="col-sm-3 offset-sm-9">

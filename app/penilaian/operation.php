@@ -50,6 +50,16 @@ switch ($_GET['op']) {
         }
         break;
 
+    case 'deleteall':
+        if (isset($post_data["post"]) && $post_data["post"] == "delete_all") {
+            $truncate = $db->query("TRUNCATE TABLE tbl_penilaian");
+            $result['status'] = true;
+            $result['message'] = "Semua Data Penilaian Berhasil Dihapus";
+            $result['data'] = $post_data['id'];
+        }
+        
+        break;
+
 }
 
 function formValidation($post_data)
