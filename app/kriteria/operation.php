@@ -1,7 +1,8 @@
 <?php
 ini_set('max_execution_time', 3000);
 header('Content-Type: application/json');
-// error_reporting(0);
+error_reporting(0);
+
 require_once('../../config/db.php');
 $db = new Db;
 
@@ -145,4 +146,4 @@ function resetBobot(&$db)
     return true;
 }
 
-echo json_encode($result);
+echo json_encode($result);exit();

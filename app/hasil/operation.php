@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 error_reporting(0);
+
 require_once('../../config/Db.php');
 require_once('../../components/Helpers.php');
 
@@ -198,4 +199,4 @@ function getDosenTerbaik($hasil, $metode)
     return $bests;
 }
 
-echo json_encode($result);
+echo json_encode($result);exit();

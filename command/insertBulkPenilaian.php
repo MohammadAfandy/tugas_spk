@@ -9,13 +9,12 @@ $data_kriteria = $db->selectQuery('tbl_kriteria', ['id'])->column();
 $faker = Faker\Factory::create('id_ID');
 
 $count = 0;
-for ($i = 0; $i < 250; $i++) {
+for ($i = 0; $i < sizeof($data_dosen); $i++) {
     $nilai = [];
     foreach ($data_kriteria as $kri) {
     	$sub_kriteria = $db->selectQuery('tbl_kriteria')->where(['id' => $kri])->one()->sub_kriteria;
     	if ($sub_kriteria) {
     		$sub_kriteria = json_decode($sub_kriteria, true);
-    		// var_dump(array_keys($sub_kriteria));die();
     		$nilai[$kri] = $faker->randomElement(array_keys($sub_kriteria));
     	} else {
         	$nilai[$kri] = $faker->biasedNumberBetween($min = 20, $max = 99, $function = 'sqrt');

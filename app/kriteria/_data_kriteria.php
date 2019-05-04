@@ -1,5 +1,8 @@
 <?php
 require_once('../../config/db.php');
+
+$db = new Db;
+$datas = $db->selectQuery('tbl_kriteria')->all();
 ?>
 <table class="table table-hover table-striped table-bordered" id="table_kriteria">
     <thead>
@@ -12,10 +15,6 @@ require_once('../../config/db.php');
         </tr>
     </thead>
     <tbody>
-        <?php
-        $db = new Db;
-        $datas = $db->selectQuery('tbl_kriteria')->all();
-        ?>
         <?php if (count($datas) > 0): ?>
             <?php $tab_index = 1; foreach ($datas as $key => $data): ?>
                 <tr id="<?= $data->id ?>">
@@ -41,7 +40,7 @@ require_once('../../config/db.php');
     </tbody>
 </table>
 
-<!-- Modal -->
+<!-- Modal Sub Kriteria -->
 <div class="modal fade" id="modalSubKriteria" tabindex="-1" role="dialog" aria-labelledby="modalSubKriteriaTitle" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

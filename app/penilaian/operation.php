@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 error_reporting(0);
+
 require_once('../../config/db.php');
 $db = new Db;
 
@@ -52,12 +53,30 @@ switch ($_GET['op']) {
 
     case 'deleteall':
         if (isset($post_data["post"]) && $post_data["post"] == "delete_all") {
-            $truncate = $db->query("TRUNCATE TABLE tbl_penilaian");
+            $truncate = $db->query("TRUNCATE TABLE tbl_penilaian")->execute();
             $result['status'] = true;
             $result['message'] = "Semua Data Penilaian Berhasil Dihapus";
-            $result['data'] = $post_data['id'];
         }
-        
+        break;
+
+    case 'getDataDosen':
+        $search = isset($post_data['search']) ? $post_data['search'] : '';
+        $id_dosen_exist = !empty($post_data['id_dosen_exist']) ? $post_data['id_dosen_exist'] : '';
+        $dosen_exist = $db->selectQuery('tbl_penilaian', ['id_dosen'])
+                          ->whereIn('id_dosen', [$id_dosen_exist], 'NOT IN')
+                          ->column();
+
+        $sql = "SELECT id, nama_dosen FROM tbl_dosen WHERE id NOT IN ('" . implode("', '", $dosen_exist) . "')";
+        $params = [];
+
+        if ($search) {
+            $sql .= " AND nama_dosen LIKE :search";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        $data_dosen = $db->query($sql, $params)->all();
+        $res['items'] = $data_dosen;
+        echo json_encode($res);exit();
         break;
 
 }
@@ -82,4 +101,4 @@ function formValidation($post_data)
     }
 }
 
-echo json_encode($result);
+echo json_encode($result);exit();

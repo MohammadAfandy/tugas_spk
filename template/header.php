@@ -7,13 +7,14 @@
     <link href="assets/css/custom.css" rel="stylesheet"/>
     <link href="assets/css/sweetalert2.min.css" rel="stylesheet"/>
     <link href="assets/css/font-awesome.min.css" rel="stylesheet"/>
+    <link href="assets/css/select2.min.css" rel="stylesheet"/>
 </head>
 <body>
     <script src="assets/js/jquery-3.3.1.js"></script>
     <script src="assets/js/jquery-ui.min.js"></script>
     <script src="assets/js/bootstrap.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
-    <div class="loader" style="display: none;"></div>
+    <script src="assets/js/select2.full.min.js"></script>
     <script>
         $(document).ajaxStart(function() {
             $("#content").addClass("hidden-background");
@@ -41,3 +42,5 @@
             });
         }
     </script>
+
+    <div class="loader" style="display: none;"></div>

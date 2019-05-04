@@ -1,6 +1,5 @@
 <?php
 $data_hasil = json_decode($_POST['hasil'], true);
-$data_kriteria = json_encode($_POST['kriteria']);
 ?>
 
 <table class="table table-hover table-striped table-bordered" id="table_vektor_s">
@@ -16,7 +15,7 @@ $data_kriteria = json_encode($_POST['kriteria']);
                 <tr>
                     <td><?= $key + 1 ?></td>
                     <td><?= $data['nama_dosen'] ?></td>
-                    <td class="text-center"><?= isset($data['vektor_s']) ? round($data['vektor_s'], 3) : '-'?></td>
+                    <td class="text-center"><?= isset($data['vektor_s']) ? $data['vektor_s'] : '-'?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>

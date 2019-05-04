@@ -79,7 +79,7 @@
                             });
                         }
 
-                        $("#info_hasil").text("Dosen Terbaik Adalah " + result.data.dosen_terbaik.join(" dan "));
+                        $("#info_hasil").html("Dosen Terbaik Adalah <b>" + result.data.dosen_terbaik.join("</b> dan <b>"));
 
                     } else {
                         Swal.fire("Error !", result.message, "error");

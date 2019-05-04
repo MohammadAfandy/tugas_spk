@@ -2,8 +2,7 @@
 <p>
     <button href="kriteria.php?act=tambah" class="btn btn-primary" id="btn_tambah">Tambah Data Kriteria</button>
 </p>
-<div id="data_kriteria">
-</div>
+<div id="data_kriteria"></div>
 <p>
     <button id="btn_set_bobot" class="btn btn-primary">Set Bobot Kriteria</button>
     <button id="btn_reset_bobot" class="btn btn-danger">Reset Bobot Kriteria</button>

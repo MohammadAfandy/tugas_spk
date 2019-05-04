@@ -88,10 +88,6 @@ Class Db
             $this->sql .= " WHERE {$column} {$not} ({$list})"; 
         }
 
-        if ($in) {
-            
-        }
-
         return $this;
     }
 
@@ -152,7 +148,13 @@ Class Db
         $sql = "INSERT INTO {$tbl} ({$fields}) VALUES ({$params_field})";
 
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+
+        try {
+            $stmt->execute($params);
+        } catch (\PDOException $e) {
+            return false;
+        }
+
         return $stmt->rowCount();
     }
 
@@ -173,7 +175,13 @@ Class Db
         }
         $sql = "UPDATE {$tbl} SET {$set_value} WHERE id = {$id}";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute($params);
+
+        try {
+            $stmt->execute($params);
+        } catch (\PDOException $e) {
+            return false;
+        }
+
         return $stmt->rowCount();
     }
 
@@ -181,14 +189,26 @@ Class Db
     {
         $sql = "DELETE FROM {$tbl} WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $id]);
+
+        try {
+            $stmt->execute([':id' => $id]);
+        } catch (\PDOException $e) {
+            return false;
+        }
+
         return $stmt->rowCount();
     }
 
-    public function query($sql)
+    public function query($sql, $params = [])
     {
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute();
-        return $stmt->rowCount();
+        $this->sql = $sql;
+        $this->params = $params;
+        return $this;
+    }
+
+    public function execute()
+    {
+        $stmt = $this->prepareStatement();
+        return $stmt->execute();
     }
 }

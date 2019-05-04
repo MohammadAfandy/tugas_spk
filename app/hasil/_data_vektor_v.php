@@ -1,6 +1,5 @@
 <?php
 $data_hasil = json_decode($_POST['hasil'], true);
-$data_kriteria = json_encode($_POST['kriteria']);
 
 usort($data_hasil, function($a, $b) {
     if ($a['vektor_v'] == $b['vektor_v']) return 0;
@@ -21,7 +20,7 @@ usort($data_hasil, function($a, $b) {
                 <tr>
                     <td><?= $key + 1 ?></td>
                     <td><?= $data['nama_dosen'] ?></td>
-                    <td class="text-center"><?= isset($data['vektor_v']) ? '<span title="' . $data['vektor_v'] . '">' . round($data['vektor_v'], 3) . '</span>' : '-'?></td>
+                    <td class="text-center"><?= isset($data['vektor_v']) ? $data['vektor_v'] : '-'?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>

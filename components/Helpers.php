@@ -3,6 +3,19 @@
 class Helpers
 {
 
+    public static function _curl($url, $post = [], $is_json = false)
+    {
+        $ch = curl_init($url);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return $is_json ? json_decode($response, true) : $response;
+    }
+
     public static function getCurrentPage()
     {
         $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

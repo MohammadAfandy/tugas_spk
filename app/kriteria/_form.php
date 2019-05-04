@@ -1,5 +1,4 @@
 <?php
-
 $db = new Db;
 
 if ($_GET['act'] === 'edit') {

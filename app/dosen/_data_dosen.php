@@ -1,6 +1,11 @@
 <?php
 require_once('../../config/db.php');
 require_once('../../components/Helpers.php');
+
+$db = new Db;
+$count_all_data = count($db->selectQuery('tbl_dosen')->all());
+$pagination = Helpers::generatePagination('dosen', $count_all_data);
+$datas = $db->selectQuery('tbl_dosen')->limit($pagination['start'], $pagination['items_per_page'])->all();
 ?>
 <table class="table table-hover table-striped table-bordered" id="table_dosen">
     <thead>
@@ -16,12 +21,6 @@ require_once('../../components/Helpers.php');
         </tr>
     </thead>
     <tbody>
-        <?php
-        $db = new Db;
-        $count_all_data = count($db->selectQuery('tbl_dosen')->all());
-        $pagination = Helpers::generatePagination('dosen', $count_all_data);
-        $datas = $db->selectQuery('tbl_dosen')->limit($pagination['start'], $pagination['items_per_page'])->all();
-        ?>
         <?php if ($count_all_data > 0): ?>
             <?php foreach ($datas as $key => $data): ?>
                 <tr id="<?= $data->id ?>">

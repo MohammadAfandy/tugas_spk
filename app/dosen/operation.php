@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 error_reporting(0);
+
 require_once('../../config/db.php');
 $db = new Db;
 
@@ -47,7 +48,6 @@ switch ($_GET['op']) {
             $result['message'] = "Data Gagal Dihapus";
         }
         break;
-
 }
 
 function formValidation($post_data)
@@ -61,4 +61,4 @@ function formValidation($post_data)
     }
 }
 
-echo json_encode($result);
+echo json_encode($result);exit();

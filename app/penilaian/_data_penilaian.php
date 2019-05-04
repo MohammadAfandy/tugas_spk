@@ -23,7 +23,7 @@ if ($search) {
     $all_data = $db->selectQuery('tbl_penilaian p', ['p.*', 'd.nama_dosen'])
                    ->join('tbl_dosen d')
                    ->on('p.id_dosen = d.id')
-                   ->where(['d.nama_dosen' => '%' . $search . '%'], 'like')
+                   ->where(['d.nama_dosen' => '%' . $search . '%'], 'LIKE')
                    ->all();
 
     $count_all_data = count($all_data);
@@ -31,7 +31,7 @@ if ($search) {
     $datas = $db->selectQuery('tbl_penilaian p', ['p.*', 'd.nama_dosen'])
             ->join('tbl_dosen d')
             ->on('p.id_dosen = d.id')
-            ->where(['d.nama_dosen' => '%' . $search . '%'], 'like')
+            ->where(['d.nama_dosen' => '%' . $search . '%'], 'LIKE')
             ->limit($pagination['start'], $pagination['items_per_page'])
             ->all();
 }
@@ -56,10 +56,8 @@ if ($search) {
     <tbody>
         <?php if ($count_all_data > 0): ?>
             <?php foreach ($datas as $key => $data): ?>
-                <?php
-                $nilai = json_decode($data->nilai, true);
-                ?>
-                <tr id="<?= $data->id ?>">
+                <?php $nilai = json_decode($data->nilai, true); ?>
+                <tr>
                     <td><?= $pagination['start'] + $key + 1 ?></td>
                     <td><?= $data->nama_dosen ?></td>
                     <?php if (!empty($nilai) && is_array($nilai)): ?>
