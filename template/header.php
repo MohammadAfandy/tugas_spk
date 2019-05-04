@@ -20,6 +20,7 @@
             $("#content").addClass("hidden-background");
             $(".loader").show();
         });
+        
         $(document).ajaxComplete(function() {
             $(".loader").hide();
             $("#content").removeClass("hidden-background");

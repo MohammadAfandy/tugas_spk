@@ -55,11 +55,13 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
                             <select name="nilai[<?= $kriteria->id ?>]" class="form-control">
                                 <option value="">--Pilih Sub Kriteria--</option>
                                 <?php foreach (json_decode($kriteria->sub_kriteria, true) as $nilai_sub => $nama_sub): ?>
-                                    <option value="<?= $nilai_sub ?>" <?= is_array($nilai) && $nilai[$kriteria->id] == $nilai_sub ? 'selected="selected"' : '' ?>><?= $nama_sub ?></option>
+                                    <?php //if (isset($nilai[$kriteria->id])): ?>
+                                        <option value="<?= $nilai_sub ?>" <?= isset($nilai[$kriteria->id]) ? $nilai[$kriteria->id] == $nilai_sub ? 'selected="selected"' : '' : ''?>><?= $nama_sub ?></option>
+                                    <?php //endif; ?>
                                 <?php endforeach; ?>
                             </select>
                         <?php else: ?>
-                            <input type="text" name="nilai[<?= $kriteria->id ?>]" id="nilai[<?= $kriteria->id ?>]" value="<?= is_array($nilai) ? $nilai[$kriteria->id] : '' ?>" class="form-control" style="width: 200px;">
+                            <input type="text" name="nilai[<?= $kriteria->id ?>]" id="nilai[<?= $kriteria->id ?>]" value="<?= isset($nilai[$kriteria->id]) ? $nilai[$kriteria->id] : '' ?>" class="form-control" style="width: 200px;">
                         <?php endif; ?>
                         </div>
                     </div>
