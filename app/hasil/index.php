@@ -15,11 +15,11 @@
 
 <div id="container_hasil" style="display: none;">
     <div class="alert alert-primary" role="alert">
-        <span id="info_hasil"></span>
+        <div id="info_hasil"></div>
     </div>
 
-    <ul class="nav nav-pills">
-        <li class="nav-item"><a class="nav-link active" data-toggle="pill" href="#tab_penilaian">Penilaian</a></li>
+    <ul class="nav nav-tabs">
+        <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab_penilaian">Penilaian</a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab2" id="link2"></a></li>
         <li class="nav-item"><a class="nav-link" data-toggle="pill" href="#tab3" id="link3"></a></li>
     </ul>
@@ -40,7 +40,7 @@
 <script>
     $(function() {
         $("body").on("click", "#btn_hasil", function() {
-            $("#container_hasil").hide();
+            $("#container_hasil").toggle();
             $.ajax({
                 url: "app/hasil/operation.php",
                 type: "POST",
@@ -48,8 +48,6 @@
                 data: {metode: $("#metode").val()},
                 success: function(result) {
                     if (result.status) {
-                        $("#container_hasil").show();
-
                         $("#data_penilaian").load("app/hasil/_data_penilaian.php", {
                             hasil: result.data.hasil,
                             kriteria: result.data.kriteria
@@ -79,8 +77,28 @@
                             });
                         }
 
-                        $("#info_hasil").html("Dosen Terbaik Adalah <b>" + result.data.dosen_terbaik.join("</b> dan <b>"));
+                        $("#info_hasil").html("Berdasarkan <b>" + result.message + "</b> Maka Diperoleh Hasil Bahwa Dosen Terbaik Adalah <b>" + result.data.dosen_terbaik.join("</b> dan <b>"));
 
+                        // let detail_info = `<b>Keterangan</b> : <br /><table class="table table-bordered"><thead><tr><th></th><th>Nama Kriteria</th><th>Tipe Kriteria</th><th>Min / Max</th><th>Bobot</th></tr></thead><tbody>`;
+
+                        // Object.keys(result.data.kriteria).forEach(function(key) {
+                        //     detail_info += `
+                        //         <tr>
+                        //             <td>C` + key + `</td>
+                        //             <td>` + result.data.kriteria[key].nama_kriteria + `</td>
+                        //             <td>` + result.data.detail_kriteria[key].tipe + `</td>
+                        //             <td>`
+                        //                 + (result.data.detail_kriteria[key].tipe == "cost" ? "Min" : "Max")
+                        //                 + ` = ` + result.data.detail_kriteria[key].nilai +
+                        //             `</td>
+                        //             <td>` + result.data.detail_kriteria[key].bobot + `</td>
+                        //         </tr>
+                        //     `;
+                        // });
+
+                        // detail_info += "</tbody></table>";
+                        // $("#info_detail").html(detail_info);
+                        $("#container_hasil").show();
                     } else {
                         Swal.fire("Error !", result.message, "error");
                     }

@@ -63,7 +63,7 @@ switch ($_GET['op']) {
         $search = isset($post_data['search']) ? $post_data['search'] : '';
         $id_dosen_exist = !empty($post_data['id_dosen_exist']) ? $post_data['id_dosen_exist'] : '';
         $dosen_exist = $db->selectQuery('tbl_penilaian', ['id_dosen'])
-                          ->whereIn('id_dosen', [$id_dosen_exist], 'NOT IN')
+                          ->where(['id_dosen' => $id_dosen_exist], '<>')
                           ->column();
 
         $sql = "SELECT id, nama_dosen FROM tbl_dosen WHERE id NOT IN ('" . implode("', '", $dosen_exist) . "')";

@@ -23,7 +23,7 @@ $result['data'] = getHasil($metode);
 
 if ($result['data']) {
     $result['status'] = true;
-    $result['message'] = "Hasil SPK Penerimaan Dosen Menggunakan Metode {$metode}";
+    $result['message'] = "SPK Penerimaan Dosen Menggunakan Metode " . strtoupper($metode);
 }
 
 function getHasil($metode)
@@ -95,22 +95,24 @@ function getHasil($metode)
 
     return [
         'hasil' => json_encode($hasil),
-        'kriteria' => json_encode($kriteria),
+        'kriteria' => $kriteria,
         'dosen_terbaik' => $dosen_terbaik,
+        'detail_kriteria' => $detail_kriteria,
     ];
 }
 
 function getDetailKriteria($penilaian, $kriteria)
 {
-    $detail_kriteria = [];
+    $detail_kriteria = $list_kriteria = [];
     foreach ($kriteria as $id_kri => $kri) {
         foreach ($penilaian as $pen) {
             $nilai = json_decode($pen->nilai, true);
-            $detail_kriteria[$id_kri][] = $nilai[$id_kri];
+            $list_kriteria[$id_kri][] = $nilai[$id_kri];
         }
-        $detail_kriteria[$id_kri]['nilai'] = $kri->tipe === 'COST' ? min($detail_kriteria[$id_kri]) : max($detail_kriteria[$id_kri]);
-        $detail_kriteria[$id_kri]['tipe'] = $kri->tipe === 'COST' ? 'min' : 'max';
+        $detail_kriteria[$id_kri]['nilai'] = $kri->tipe === 'COST' ? min($list_kriteria[$id_kri]) : max($list_kriteria[$id_kri]);
+        $detail_kriteria[$id_kri]['tipe'] = $kri->tipe === 'COST' ? 'cost' : 'benefit';
         $detail_kriteria[$id_kri]['bobot'] = $kri->bobot;
+        unset($list_kriteria[$id_kri]);
     }
 
     return $detail_kriteria;
@@ -132,7 +134,7 @@ function getNormalisasi($nilai, $detail_kriteria)
     $normalisasi = [];
 
     foreach ($nilai as $id_kri => $nil) {
-        $normalisasi[$id_kri] = ($detail_kriteria[$id_kri]['tipe'] === 'min') ? $detail_kriteria[$id_kri]['nilai'] / $nil : $nil / $detail_kriteria[$id_kri]['nilai'];
+        $normalisasi[$id_kri] = ($detail_kriteria[$id_kri]['tipe'] === 'cost') ? $detail_kriteria[$id_kri]['nilai'] / $nil : $nil / $detail_kriteria[$id_kri]['nilai'];
     }
 
     return $normalisasi;
@@ -156,7 +158,7 @@ function getVektorS($nilai, $detail_kriteria)
     $vektor_s = [];
 
     foreach ($nilai as $id_kri => $nil) {
-        $vektor_s[$id_kri] = ($detail_kriteria[$id_kri]['tipe'] === 'min') ? pow($nil, -($detail_kriteria[$id_kri]['bobot'])) : pow($nil, $detail_kriteria[$id_kri]['bobot']);
+        $vektor_s[$id_kri] = ($detail_kriteria[$id_kri]['tipe'] === 'cost') ? pow($nil, -($detail_kriteria[$id_kri]['bobot'])) : pow($nil, $detail_kriteria[$id_kri]['bobot']);
     }
 
     $vektor_s = array_product($vektor_s);
