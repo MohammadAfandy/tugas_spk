@@ -1,5 +1,5 @@
 <?php
-require_once('../../config/db.php');
+require_once('../../config/Db.php');
 
 $db = new Db;
 $datas = $db->selectQuery('tbl_kriteria')->all();

@@ -14,7 +14,7 @@
         $("#btn_tambah").on("click", function() {
             alertConfirmation("Menambah Kriteria Akan Mereset Seluruh Bobot Kriteria", "Warning", "OK").then(function(res) {
                 if (res.value) {
-                    window.location = '<?= Helpers::baseUrl("kriteria.php?act=tambah") ?>';
+                    window.location = "kriteria.php?act=tambah";
                 }
             }); 
             return false;

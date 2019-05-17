@@ -53,11 +53,6 @@ class Helpers
         return $result;
     }
 
-    public static function baseUrl($url = '')
-    {
-        return 'http://localhost/tugas_spk/' . $url;
-    }
-
     /**
      * cek apakah semua bobot kriteria sudah diset atau belum (masih 0)
      * sudah = false, belum = true
@@ -118,6 +113,28 @@ class Helpers
         }
 
         return $nilai_sub_kriteria;
+    }
+
+    public static function getDataDosen($db, $post_data, $is_json = true)
+    {
+        $search = isset($post_data['search']) ? $post_data['search'] : '';
+        $id_dosen_exist = !empty($post_data['id_dosen_exist']) ? $post_data['id_dosen_exist'] : '';
+        $dosen_exist = $db->selectQuery('tbl_penilaian', ['id_dosen'])
+                          ->where(['id_dosen' => $id_dosen_exist], '<>')
+                          ->column();
+
+        $sql = "SELECT id, nama_dosen FROM tbl_dosen WHERE id NOT IN ('" . implode("', '", $dosen_exist) . "')";
+        $params = [];
+
+        if ($search) {
+            $sql .= " AND nama_dosen LIKE :search";
+            $params[':search'] = '%' . $search . '%';
+        }
+
+        $data_dosen = $db->query($sql, $params)->all();
+        $res['items'] = $data_dosen;
+
+        return $is_json ? json_encode($res) : $res;
     }
 
     public static function generatePagination($table, $count_all_data, $count_page = 10, $items_per_page = 10)

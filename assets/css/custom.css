@@ -31,6 +31,10 @@
   line-height: 1;
 }
 
+.table th {
+    text-align: center;
+}
+
 .navbar {
   min-height: 70px !important;
 }

@@ -2,7 +2,8 @@
 header('Content-Type: application/json');
 error_reporting(0);
 
-require_once('../../config/db.php');
+require_once('../../config/Db.php');
+require_once('../../components/Helpers.php');
 $db = new Db;
 
 $result = [
@@ -60,23 +61,8 @@ switch ($_GET['op']) {
         break;
 
     case 'getDataDosen':
-        $search = isset($post_data['search']) ? $post_data['search'] : '';
-        $id_dosen_exist = !empty($post_data['id_dosen_exist']) ? $post_data['id_dosen_exist'] : '';
-        $dosen_exist = $db->selectQuery('tbl_penilaian', ['id_dosen'])
-                          ->where(['id_dosen' => $id_dosen_exist], '<>')
-                          ->column();
-
-        $sql = "SELECT id, nama_dosen FROM tbl_dosen WHERE id NOT IN ('" . implode("', '", $dosen_exist) . "')";
-        $params = [];
-
-        if ($search) {
-            $sql .= " AND nama_dosen LIKE :search";
-            $params[':search'] = '%' . $search . '%';
-        }
-
-        $data_dosen = $db->query($sql, $params)->all();
-        $res['items'] = $data_dosen;
-        echo json_encode($res);exit();
+        $data_dosen = Helpers::getDataDosen($db, $post_data);
+        echo $data_dosen;exit();
         break;
 
 }
@@ -92,8 +78,13 @@ function formValidation($post_data)
         }
         if ($field == "nilai") {
             foreach ($record as $id_kri => $nilai) {
-                if (empty(intval($nilai))) {
+                if (empty($nilai)) {
                     $result['message'] = "Nilai Tidak Boleh Kosong atau 0";
+                    echo json_encode($result);exit();
+                }
+
+                if (!is_numeric($nilai)) {
+                    $result['message'] = "Nilai Harus Berupa Angka";
                     echo json_encode($result);exit();
                 }
             }

@@ -1,9 +1,9 @@
-<table class="table table-hover table-striped table-bordered" id="table_penilaian">
+<table class="table table-hover table-striped table-bordered" id="table_normalisasi">
     <thead>
         <tr>
             <th rowspan="2">No</th>
             <th rowspan="2">Nama Dosen</th>
-            <th colspan="<?= count($data_kriteria) ?>">Penilaian</th>
+            <th colspan="<?= count($data_kriteria) ?>">Normalisasi</th>
         </tr>
         <tr>
             <?php foreach($data_kriteria as $kriteria): ?>
@@ -19,7 +19,7 @@
                     <td><?= $data['nama_dosen'] ?></td>
                     <?php foreach ($data_kriteria as $id_kri => $kri): ?>
                         <td class="text-center">
-                            <?= isset($data['nilai'][$id_kri]) ? $data['nilai'][$id_kri] : '-'?>
+                            <?= isset($data['normalisasi'][$id_kri]) ? round($data['normalisasi'][$id_kri], 3) : '-'?>
                         </td>
                     <?php endforeach; ?>
                 </tr>

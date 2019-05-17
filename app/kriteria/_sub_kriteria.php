@@ -1,5 +1,5 @@
 <?php
-require_once('../../config/db.php');
+require_once('../../config/Db.php');
 $db = new Db;
 $data = $db->selectQuery('tbl_kriteria')->where(['id' => $_GET['id']])->one();
 $id_sub = 1;

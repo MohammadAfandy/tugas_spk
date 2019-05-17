@@ -3,7 +3,7 @@ ini_set('max_execution_time', 3000);
 header('Content-Type: application/json');
 error_reporting(0);
 
-require_once('../../config/db.php');
+require_once('../../config/Db.php');
 $db = new Db;
 
 $result = [

@@ -12,10 +12,7 @@ if ($_GET['act'] === 'edit') {
 
 $id_dosen_exist = isset($data->id_dosen) ? $data->id_dosen : '';
 
-$data_dosen = Helpers::_curl(Helpers::baseUrl('app/penilaian/operation.php?op=getDataDosen'), [
-    'id_dosen_exist' => $id_dosen_exist,
-], true);
-
+$data_dosen = Helpers::getDataDosen($db, ['id_dosen_exist' => $id_dosen_exist], false);
 $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai, true) : '';
 ?>
 
@@ -92,7 +89,7 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
                 success: function(result) {
                     if (result.status) {
                         Swal.fire({title: "Success !", text: result.message, type: "success"}).then(function() { 
-                            window.location = '<?= Helpers::baseUrl("penilaian.php") ?>';
+                            window.location = "penilaian.php";
                         });
                     } else {
                         Swal.fire("Error !", result.message, "error");
@@ -104,7 +101,7 @@ $nilai = isset($data->nilai) && !empty($data->nilai) ? json_decode($data->nilai,
         $(".select-nama-dosen").select2({
             placeholder: "--Pilih Dosen--",
             ajax: {
-                url: '<?= Helpers::baseUrl() ?>' + "app/penilaian/operation.php?op=getDataDosen",
+                url: "app/penilaian/operation.php?op=getDataDosen",
                 type: "POST",
                 dataType: "json",
                 data: function(params) {

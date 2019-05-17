@@ -1,9 +1,4 @@
-<?php
-$data_hasil = json_decode($_POST['hasil'], true);
-$data_kriteria = $_POST['kriteria'];
-?>
-
-<table class="table table-hover table-striped table-bordered" id="table_normalisasi">
+<table class="table table-hover table-striped table-bordered" id="table_normalisasi_terbobot">
     <thead>
         <tr>
             <th rowspan="2">No</th>
@@ -24,7 +19,7 @@ $data_kriteria = $_POST['kriteria'];
                     <td><?= $data['nama_dosen'] ?></td>
                     <?php foreach ($data_kriteria as $id_kri => $kri): ?>
                         <td class="text-center">
-                            <?= isset($data['normalisasi'][$id_kri]) ? round($data['normalisasi'][$id_kri], 3) : '-'?>
+                            <?= isset($data['normalisasi_terbobot'][$id_kri]) ? round($data['normalisasi_terbobot'][$id_kri], 3) : '-'?>
                         </td>
                     <?php endforeach; ?>
                 </tr>

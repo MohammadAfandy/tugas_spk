@@ -2,7 +2,7 @@
 header('Content-Type: application/json');
 error_reporting(0);
 
-require_once('../../config/db.php');
+require_once('../../config/Db.php');
 $db = new Db;
 
 $result = [
@@ -15,7 +15,7 @@ $post_data = $_POST;
 
 switch ($_GET['op']) {
     case 'tambah':
-        formValidation($post_data);
+        $post_data = formValidation($post_data);
         $insert = $db->insertQuery('tbl_dosen', $post_data);
         if ($insert) {
             $result['status'] = true;
@@ -26,7 +26,7 @@ switch ($_GET['op']) {
         break;
 
     case 'update':
-        formValidation($post_data);
+        $post_data = formValidation($post_data);
         $update = $db->updateQuery('tbl_dosen', $post_data);
 
         if ($update) {
@@ -54,11 +54,16 @@ function formValidation($post_data)
 {
     $not_empty = ['nidn', 'nama_dosen'];
     foreach ($post_data as $field => $record) {
-        if (in_array($field, $not_empty) && $record == '') {
-            $result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
-            echo json_encode($result);exit();
+        if ($record == '') {
+            if (in_array($field, $not_empty)) {
+                $result['message'] = strtoupper(str_replace('_', ' ', $field)) . " Tidak Boleh Kosong";
+                echo json_encode($result);exit();
+            }
+            unset($post_data[$field]);
         }
     }
+
+    return $post_data;
 }
 
 echo json_encode($result);exit();

@@ -1,18 +1,16 @@
 <?php
-$data_hasil = json_decode($_POST['hasil'], true);
-
 usort($data_hasil, function($a, $b) {
-    if ($a['rank'] == $b['rank']) return 0;
-    return ($b['rank'] > $a['rank']) ? 1 : -1;
+    if ($a['vektor_v'] == $b['vektor_v']) return 0;
+    return ($b['vektor_v'] > $a['vektor_v']) ? 1 : -1;
 });
 ?>
 
-<table class="table table-hover table-striped table-bordered" id="table_rank">
+<table class="table table-hover table-striped table-bordered" id="table_vektor_v">
     <thead>
         <tr>
             <th>No</th>
             <th>Nama Dosen</th>
-            <th>Rank</th>
+            <th>Vektor S</th>
     </thead>
     <tbody>
         <?php if (count($data_hasil) > 0): ?>
@@ -20,7 +18,7 @@ usort($data_hasil, function($a, $b) {
                 <tr>
                     <td><?= $key + 1 ?></td>
                     <td><?= $data['nama_dosen'] ?></td>
-                    <td class="text-center"><?= isset($data['rank']) ? $data['rank'] : '-'?></td>
+                    <td class="text-center"><?= isset($data['vektor_v']) ? $data['vektor_v'] : '-'?></td>
                 </tr>
             <?php endforeach; ?>
         <?php else: ?>

@@ -2,7 +2,7 @@
 <html>
 <head>
     <title>Sistem Pendukung Keputusan - Seleksi Penerimaan Dosen</title>
-    <link href="assets/css/bootstrap.css" rel="stylesheet"/>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet"/>
     <link href="assets/css/jquery-ui.min.css" rel="stylesheet"/>
     <link href="assets/css/custom.css" rel="stylesheet"/>
     <link href="assets/css/sweetalert2.min.css" rel="stylesheet"/>
@@ -10,9 +10,9 @@
     <link href="assets/css/select2.min.css" rel="stylesheet"/>
 </head>
 <body>
-    <script src="assets/js/jquery-3.3.1.js"></script>
+    <script src="assets/js/jquery-3.4.1.min.js"></script>
     <script src="assets/js/jquery-ui.min.js"></script>
-    <script src="assets/js/bootstrap.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
     <script src="assets/js/sweetalert2.all.min.js"></script>
     <script src="assets/js/select2.full.min.js"></script>
     <script>

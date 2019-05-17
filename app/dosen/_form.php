@@ -89,7 +89,7 @@ if ($_GET['act'] === 'edit') {
                 success: function(result) {
                     if (result.status) {
                         Swal.fire({title: "Success !", text: result.message, type: "success"}).then(function() { 
-                            window.location = '<?= Helpers::baseUrl("dosen.php") ?>';
+                            window.location = "dosen.php";
                         });
                     } else {
                         Swal.fire("Error !", result.message, "error");
