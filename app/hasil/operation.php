@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json');
-// error_reporting(0);
+error_reporting(0);
 
 require_once('../../config/Db.php');
 require_once('../../components/Helpers.php');

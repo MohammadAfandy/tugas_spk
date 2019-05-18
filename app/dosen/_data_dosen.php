@@ -28,7 +28,7 @@ $datas = $db->selectQuery('tbl_dosen')->limit($pagination['start'], $pagination[
                     <td><?= $data->nidn ?></td>
                     <td><?= $data->nama_dosen ?></td>
                     <td><?= $data->jk ?></td>
-                    <td width="120"><?= $data->tempat_lahir . ', ' . Helpers::dateIndo($data->tgl_lahir) ?></td>
+                    <td width="120"><?= isset($data->tempat_lahir) ? $data->tempat_lahir . ', ' . Helpers::dateIndo($data->tgl_lahir) : Helpers::dateIndo($data->tgl_lahir) ?></td>
                     <td><?= $data->no_hp ?></td>
                     <td><?= $data->email ?></td>
                     <td>
