@@ -1,3 +1,9 @@
+<?php
+usort($data_hasil, function($a, $b) {
+    if ($a['vektor_s'] == $b['vektor_s']) return 0;
+    return ($b['vektor_s'] > $a['vektor_s']) ? 1 : -1;
+});
+?>
 <table class="table table-hover table-striped table-bordered" id="table_vektor_s">
     <thead>
         <tr>
